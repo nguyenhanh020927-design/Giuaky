@@ -88,14 +88,22 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Chỉnh Ảnh */
+/* Chỉnh Ảnh và thêm hiệu ứng phóng to */
         img { 
             width: 100%; 
             border-radius: 8px; 
             margin-top: 15px; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Bật hiệu ứng chuyển động */
         }
 
+        img:hover {
+            transform: scale(1.03); /* Phóng to lên 3% */
+            box-shadow: 0 8px 20px rgba(255, 118, 117, 0.4); /* Đổ bóng đậm hơn */
+            cursor: pointer;
+        }
+
+        
         .card { 
             background: #fffafa; 
             padding: 15px 20px; 
@@ -110,8 +118,8 @@
 <body>
 <!-- Thanh chạy chữ Sáng tạo -->
         <div style="background-color: #ff7675; color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(255, 118, 117, 0.3);">
-            <marquee scrollamount="6">
-                🚀 Chào mừng thầy cô đến với Báo cáo Giữa kỳ! 📈 Mã cổ phiếu đang có dấu hiệu tăng trần! 💰🌸
+            <marquee scrollamount="10">
+                🚀 Cập nhật dữ liệu biến động giá 365 ngày giao dịch 📈 Mã cổ phiếu đang có dấu hiệu tăng trần! 💰 Trực quan hóa dữ liệu bằng Python ✨ Điểm nhấn giao dịch nổi bật 🌸
             </marquee>
         </div>
 <div class="container">
@@ -122,8 +130,8 @@
         <h1>BÁO CÁO GIỮA KỲ: MÔ PHỎNG BIẾN ĐỘNG GIÁ CHỨNG KHOÁN</h1>
         
         <div class="info">
-            <p><strong>Sinh viên thực hiện:</strong> [Điền tên của bạn] &nbsp;&nbsp;|&nbsp;&nbsp; <strong>MSSV:</strong> [Điền MSSV]</p>
-            <p><strong>Dữ liệu phân tích:</strong> Mã cổ phiếu abc-[Điền số thứ tự của bạn]</p>
+            <p><strong>Sinh viên thực hiện:</strong> Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; <strong>MSSV:</strong> 3110525005 </p>
+            <p><strong>Dữ liệu phân tích:</strong> Mã cổ phiếu sv05.tsv </p>
         </div>
 
         <div class="section">
