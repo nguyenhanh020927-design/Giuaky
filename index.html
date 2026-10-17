@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <script>
+        // Bạn có thể đổi mật khẩu py25ckdl thành chữ khác nếu muốn
+        var password = "py25ckdl"; 
+        var input = prompt("Vui lòng nhập mật khẩu để xem báo cáo (Mật khẩu: py25ckdl):");
+        
+        if (input !== password) {
+            alert("Sai mật khẩu! Bạn không có quyền truy cập.");
+            // Đẩy người dùng sang trang khác nếu nhập sai
+            window.location.href = "https://www.google.com"; 
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
