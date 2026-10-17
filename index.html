@@ -105,12 +105,13 @@
             font-size: 16px;
         }
     </style>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 <!-- Thanh chạy chữ Sáng tạo -->
         <div style="background-color: #ff7675; color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(255, 118, 117, 0.3);">
             <marquee scrollamount="6">
-                🚀 Chào mừng thầy cô đến với Báo cáo Giữa kỳ! 📈 Mã cổ phiếu đang có dấu hiệu tăng trần! 💰 Chúc thầy cô chấm bài thật nhiều niềm vui và cho em điểm A nhé! 🌸
+                🚀 Chào mừng thầy cô đến với Báo cáo Giữa kỳ! 📈 Mã cổ phiếu đang có dấu hiệu tăng trần! 💰🌸
             </marquee>
         </div>
 <div class="container">
@@ -155,13 +156,41 @@
     </div>
 </div>
 
-<!-- ĐOẠN KHÓA MẬT KHẨU (Nếu không cần thì xóa đoạn script này đi) -->
 <script>
     var password = "py25ckdl"; 
     var input = prompt("Vui lòng nhập mật khẩu để xem báo cáo (Mật khẩu: py25ckdl):");
+    
     if (input !== password) {
         alert("Sai mật khẩu! Bạn không có quyền truy cập.");
         window.location.href = "https://www.google.com"; 
+    } else {
+        // Nhập đúng thì báo câu này và bắn pháo hoa
+        alert("Mật khẩu chính xác! Chào mừng thầy cô đến với báo cáo của Nguyễn Thị Hạnh!");
+        
+        // Hiệu ứng pháo hoa
+        var duration = 3 * 1000;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff7675', '#ff9ff3', '#feca57']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff7675', '#ff9ff3', '#feca57']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
     }
 </script>
 
