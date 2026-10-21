@@ -176,6 +176,21 @@
 
     </style>
 </head>
+<!-- MÃ KHÓA BẢO MẬT TRANG WEB -->
+<script>
+    // Có thể đổi py25ckdl thành mật khẩu khác nếu muốn
+    var password = "py25ckdl"; 
+    var input = prompt("Vui lòng nhập mật khẩu để truy cập báo cáo (Mật khẩu: py25ckdl):");
+    
+    if (input !== password) {
+        alert("Sai mật khẩu! Bạn không có quyền truy cập trang web này.");
+        // Đẩy về Google nếu nhập sai
+        window.location.href = "https://www.google.com"; 
+    } else {
+        // Lời chào thanh lịch khi nhập đúng mật khẩu
+        alert("Mật khẩu chính xác! Chào mừng đến với Báo cáo phân tích của Nguyễn Thị Hạnh.");
+    }
+</script>
 <body>
 
 <!-- NÚT NGÔN NGỮ & SÁNG TỐI (Tối giản) -->
