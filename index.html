@@ -34,7 +34,6 @@
             line-height: 1.8;
             font-weight: 300;
             overflow-x: hidden; /* Dòng quan trọng 1: Cắt bỏ dải đen/xám bị tràn ngang */
-            width: 100%;
         }
 
         /* NÚT ĐỔI NGÔN NGỮ & SÁNG TỐI */
@@ -79,13 +78,14 @@
 
         .hero-video {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            max-width: none; /* Thêm dòng này để phá vỡ giới hạn 850px */
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
             border: none;
-            object-fit: cover; /* Cắt video cho vừa khung hình */
             z-index: 0;
         }
 
