@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
     
-    <!-- Font chữ chuẩn phong cách Luxury / Fashion -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* TONE MÀU TỐI GIẢN (MINIMALIST) */
         :root {
-            --bg-color: #ffffff; /* Trắng tinh */
-            --text-color: #000000; /* Đen tuyền */
-            --border-color: #e0e0e0; /* Xám cực nhạt */
+            --bg-color: #ffffff; 
+            --text-color: #000000; 
+            --border-color: #e0e0e0; 
         }
 
         body.dark-mode {
-            --bg-color: #000000; /* Đen tuyền */
-            --text-color: #ffffff; /* Trắng tinh */
+            --bg-color: #000000; 
+            --text-color: #ffffff; 
             --border-color: #333333;
         }
 
@@ -33,10 +31,9 @@
             transition: 0.3s ease;
             line-height: 1.8;
             font-weight: 300;
-            overflow-x: hidden; /* Dòng quan trọng 1: Cắt bỏ dải đen/xám bị tràn ngang */
+            overflow-x: hidden; 
         }
 
-        /* NÚT ĐỔI NGÔN NGỮ & SÁNG TỐI */
         .controls {
             position: fixed;
             top: 20px;
@@ -44,7 +41,7 @@
             display: flex;
             gap: 20px;
             z-index: 1000;
-            mix-blend-mode: difference; /* Nút tự đổi màu tương phản với nền */
+            mix-blend-mode: difference; 
         }
 
         button {
@@ -65,11 +62,10 @@
             border-bottom: 1px solid #ffffff;
         }
 
-        /* KHU VỰC VIDEO BANNER (DIOR STYLE) */
         .hero-section {
             position: relative;
             width: 100%;
-            height: 90vh; /* Độ cao bằng 90% màn hình */
+            height: 90vh; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -89,7 +85,6 @@
             z-index: 0;
         }
 
-        /* Lớp phủ hơi tối mờ để làm nổi bật chữ màu trắng */
         .hero-overlay {
             position: absolute;
             top: 0;
@@ -123,7 +118,6 @@
             opacity: 0.8;
         }
 
-        /* KHUNG CHỨA NỘI DUNG BÁO CÁO */
         .container { 
             max-width: 900px; 
             margin: 80px auto; 
@@ -151,7 +145,6 @@
             padding-bottom: 40px;
         }
 
-        /* TÙY CHỈNH VIDEO & ẢNH */
         .media-wrapper {
             width: 100%;
             margin: 40px 0;
@@ -162,7 +155,7 @@
             width: 100%; 
             max-width: 850px; 
             border: 1px solid var(--border-color);
-            border-radius: 0; /* Giao diện sang trọng thường không bo góc */
+            border-radius: 0; 
         }
 
         .caption {
@@ -173,39 +166,32 @@
             opacity: 0.6;
             text-align: center;
         }
-
     </style>
-</head>
-<!-- MÃ KHÓA BẢO MẬT TRANG WEB -->
-<script>
-    // Có thể đổi py25ckdl thành mật khẩu khác nếu muốn
-    var password = "py25ckdl"; 
-    var input = prompt("Vui lòng nhập mật khẩu để truy cập báo cáo (Mật khẩu: py25ckdl):");
     
-    if (input !== password) {
-        alert("Sai mật khẩu! Bạn không có quyền truy cập trang web này.");
-        // Đẩy về Google nếu nhập sai
-        window.location.href = "https://www.google.com"; 
-    } else {
-        // Lời chào thanh lịch khi nhập đúng mật khẩu
-        alert("Mật khẩu chính xác! Chào mừng đến với Báo cáo phân tích của Nguyễn Thị Hạnh.");
-    }
-</script>
+    <!-- MÃ KHÓA BẢO MẬT ĐÃ ĐƯỢC CHUYỂN VÀO TRONG HEAD CHO CHUẨN -->
+    <script>
+        var password = "py25ckdl"; 
+        var input = prompt("Vui lòng nhập mật khẩu để truy cập báo cáo (Mật khẩu: py25ckdl):");
+        
+        if (input !== password) {
+            alert("Sai mật khẩu! Bạn không có quyền truy cập trang web này.");
+            window.location.href = "https://www.google.com"; 
+        } else {
+            alert("Mật khẩu chính xác! Chào mừng đến với Báo cáo phân tích của Nguyễn Thị Hạnh.");
+        }
+    </script>
+</head>
+
 <body>
 
-<!-- NÚT NGÔN NGỮ & SÁNG TỐI (Tối giản) -->
 <div class="controls">
     <button id="langToggle">ENG</button>
     <button id="themeToggle">DARK</button>
 </div>
 
-<!-- KHU VỰC BANNER VIDEO NỀN CỰC CHILL -->
 <div class="hero-section">
-    <!-- Thêm id="heroVideo" để Lập trình gọi tới nó -->
-    <video id="heroVideo" class="hero-video" autoplay loop muted playsinline>
-        <!-- Đặt id cho source và để mặc định là video_sang.mp4 -->
-        <source id="heroVideoSource" src="3.mp4" type="video/mp4">
-    </video>
+    <!-- Gán trực tiếp src vào thẻ video, xóa bỏ thẻ source bên trong -->
+    <video id="heroVideo" class="hero-video" autoplay loop muted playsinline src="3.mp4"></video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
         <h1 class="lang" data-vi="Báo Cáo Giữa Kỳ" data-en="Midterm Report">Báo Cáo Giữa Kỳ</h1>
@@ -213,10 +199,7 @@
     </div>
 </div>
 
-<!-- NỘI DUNG CUỘN LÊN -->
 <div class="container">
-    
-    <!-- THÔNG TIN SINH VIÊN -->
     <div class="info-header">
         <p class="lang" 
            data-vi="Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005" 
@@ -230,7 +213,6 @@
         </p>
     </div>
 
-    <!-- PHẦN 1: VIDEO MÔ PHỎNG CHỨNG KHOÁN -->
     <h2 class="lang" data-vi="I. Mô Phỏng Động Học" data-en="I. Dynamic Simulation">I. Mô Phỏng Động Học</h2>
     <div class="media-wrapper">
         <video controls>
@@ -239,7 +221,6 @@
         <div class="caption lang" data-vi="Biến động giá theo từng phiên giao dịch" data-en="Price fluctuation per trading session">Biến động giá theo từng phiên giao dịch</div>
     </div>
 
-    <!-- PHẦN 2: THỐNG KÊ -->
     <h2 class="lang" data-vi="II. Phân Tích Thống Kê" data-en="II. Statistical Analysis">II. Phân Tích Thống Kê</h2>
     <div class="media-wrapper">
         <img src="cau1_bieudocot.png" alt="Biểu đồ cột">
@@ -251,40 +232,48 @@
         <div class="caption lang" data-vi="Phân bố biên độ dao động (Boxplot)" data-en="Volatility distribution (Boxplot)">Phân bố biên độ dao động (Boxplot)</div>
     </div>
 
-    <!-- PHẦN 3: HISTOGRAM -->
     <h2 class="lang" data-vi="III. Tổ Chức Đồ" data-en="III. Histogram">III. Tổ Chức Đồ</h2>
     <div class="media-wrapper">
         <img src="cau4_histogram.png" alt="Histogram">
         <div class="caption lang" data-vi="So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm" data-en="Price shift comparison: First vs Second half of the year">So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm</div>
     </div>
-
 </div>
 
-<!-- SCRIPT XỬ LÝ NÚT BẤM -->
 <script>
-const themeToggle = document.getElementById('themeToggle');
+    // 1. CHỨC NĂNG ĐỔI SÁNG/TỐI & VIDEO
+    const themeToggle = document.getElementById('themeToggle');
     const heroVideo = document.getElementById('heroVideo');
-    const heroVideoSource = document.getElementById('heroVideoSource');
 
     themeToggle.addEventListener('click', () => {
-        // 1. Đổi giao diện
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         
-        // 2. Đổi chữ trên nút
         themeToggle.innerText = isDark ? 'LIGHT' : 'DARK';
 
-        // 3. Đổi video nền mượt mà
+        // Gán trực tiếp src cho thẻ video
         if (isDark) {
-            heroVideoSource.src = '2.mp4'; // Đổi sang video cảnh tối
+            heroVideo.src = '2.mp4'; 
         } else {
-            heroVideoSource.src = '3.mp4'; // Đổi về video cảnh sáng
+            heroVideo.src = '3.mp4'; 
         }
         
-        // Bắt buộc trình duyệt tải lại và phát video mới
         heroVideo.load();
         heroVideo.play();
     });
+
+    // 2. CHỨC NĂNG ĐỔI NGÔN NGỮ (Tui đã thêm lại cho bà)
+    let isEnglish = false;
+    const langToggle = document.getElementById('langToggle');
+    const langElements = document.querySelectorAll('.lang');
+
+    langToggle.addEventListener('click', () => {
+        isEnglish = !isEnglish;
+        langToggle.innerText = isEnglish ? 'VIE' : 'ENG';
+        langElements.forEach(el => {
+            el.innerText = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-vi');
+        });
+    });
 </script>
+
 </body>
 </html>
