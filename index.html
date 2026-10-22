@@ -201,9 +201,10 @@
 
 <!-- KHU VỰC BANNER VIDEO NỀN CỰC CHILL -->
 <div class="hero-section">
-    <!-- Video nền. Bà đổi tên file 'video_nen.mp4' thành tên video aesthetic bà kiếm được nha -->
-    <video class="hero-video" autoplay loop muted playsinline>
-        <source src="2.mp4" type="video/mp4">
+    <!-- Thêm id="heroVideo" để Lập trình gọi tới nó -->
+    <video id="heroVideo" class="hero-video" autoplay loop muted playsinline>
+        <!-- Đặt id cho source và để mặc định là video_sang.mp4 -->
+        <source id="heroVideoSource" src="3.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -261,24 +262,29 @@
 
 <!-- SCRIPT XỬ LÝ NÚT BẤM -->
 <script>
-    const themeToggle = document.getElementById('themeToggle');
+const themeToggle = document.getElementById('themeToggle');
+    const heroVideo = document.getElementById('heroVideo');
+    const heroVideoSource = document.getElementById('heroVideoSource');
+
     themeToggle.addEventListener('click', () => {
+        // 1. Đổi giao diện
         document.body.classList.toggle('dark-mode');
-        themeToggle.innerText = document.body.classList.contains('dark-mode') ? 'LIGHT' : 'DARK';
-    });
+        const isDark = document.body.classList.contains('dark-mode');
+        
+        // 2. Đổi chữ trên nút
+        themeToggle.innerText = isDark ? 'LIGHT' : 'DARK';
 
-    let isEnglish = false;
-    const langToggle = document.getElementById('langToggle');
-    const langElements = document.querySelectorAll('.lang');
-
-    langToggle.addEventListener('click', () => {
-        isEnglish = !isEnglish;
-        langToggle.innerText = isEnglish ? 'VIE' : 'ENG';
-        langElements.forEach(el => {
-            el.innerText = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-vi');
-        });
+        // 3. Đổi video nền mượt mà
+        if (isDark) {
+            heroVideoSource.src = '2.mp4'; // Đổi sang video cảnh tối
+        } else {
+            heroVideoSource.src = '3.mp4'; // Đổi về video cảnh sáng
+        }
+        
+        // Bắt buộc trình duyệt tải lại và phát video mới
+        heroVideo.load();
+        heroVideo.play();
     });
 </script>
-
 </body>
 </html>
