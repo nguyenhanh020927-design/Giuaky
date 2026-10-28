@@ -225,13 +225,15 @@
         <!-- LƯỚI ĐA CHIỀU (GRID) CHỨA BIỂU ĐỒ & VIDEO -->
 <!-- TÍNH NĂNG ĐIỂM CỘNG: BIỂU ĐỒ TƯƠNG TÁC TOÀN CẢNH -->
         <div class="glass-panel" style="margin-bottom: 30px;">
-            <div class="panel-header lang" data-vi="Biểu Đồ Diễn Biến Giá Tương Tác (Chart.js)" data-en="Interactive Price Action Chart (Chart.js)">Biểu Đồ Diễn Biến Giá Tương Tác (Chart.js)</div>
-            <div class="img-container" style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px;">
-                <canvas id="luxuryChart" height="100"></canvas>
+            <div class="panel-header lang" data-vi="Biểu Đồ Diễn Biến Giá" data-en="Interactive Price Action">Biểu Đồ Diễn Biến Giá</div>
+            
+            <!-- Đã đổi background thành transparent để xóa màu xám xịt -->
+            <div class="img-container" style="padding: 20px 20px 0 20px; background: transparent;">
+                <canvas id="luxuryChart" height="110"></canvas>
             </div>
-            <div class="caption lang" data-vi="Rê chuột vào biểu đồ để rà soát chi tiết giá đóng cửa từng phiên (365 ngày)" data-en="Hover chart to see closing price details for each session (365 days)">Rê chuột vào biểu đồ để rà soát chi tiết giá đóng cửa từng phiên (365 ngày)</div>
+            
+            <div class="caption lang" data-vi="Rê chuột vào biểu đồ để đối chiếu Giá Mở Cửa & Đóng Cửa (365 phiên)" data-en="Hover chart to compare Open & Close Prices (365 sessions)">Rê chuột vào biểu đồ để đối chiếu Giá Mở Cửa & Đóng Cửa (365 phiên)</div>
         </div>
-        <div class="charts-grid">
             
             <!-- Ô SỐ 1: VIDEO MÔ PHỎNG -->
             <div class="glass-panel">
@@ -315,59 +317,108 @@
             });
         });
     </script>
-<!-- SCRIPT CHẠY BIỂU ĐỒ TƯƠNG TÁC -->
+<!-- SCRIPT TỰ ĐỘNG ĐỌC FILE TSV VÀ VẼ BIỂU ĐỒ CHART.JS -->
     <script>
-        // BÀ PASTE DÃY 365 SỐ TỪ PYTHON VÀO ĐÂY NHÉ
-        const priceData = [124.5, 125.1, 123.8, 126.0, 128.5, 127.2, 130.1, 132.8, 129.5, 125.4, 121.1, 122.5, 124.0, 128.8, 130.2]; 
+        async function loadDataAndDrawChart() {
+            try {
+                // 1. TỰ ĐỘNG GỌI FILE sv05.tsv TỪ GITHUB
+                const response = await fetch('sv05.tsv');
+                const dataText = await response.text();
 
-        const labels = priceData.map((_, index) => `Phiên ${index + 1}`);
-        const ctxChart = document.getElementById('luxuryChart').getContext('2d');
-        
-        let gradient = ctxChart.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(184, 151, 74, 0.5)'); 
-        gradient.addColorStop(1, 'rgba(184, 151, 74, 0.0)'); 
+                // 2. XỬ LÝ DỮ LIỆU TSV
+                const lines = dataText.trim().split('\n');
+                const openPrices = [];
+                const closePrices = [];
+                const labels = [];
 
-        new Chart(ctxChart, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Giá Đóng Cửa',
-                    data: priceData,
-                    borderColor: '#b8974a', 
-                    borderWidth: 2,
-                    backgroundColor: gradient, 
-                    fill: true,
-                    pointRadius: 0, 
-                    pointHoverRadius: 6,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: '#b8974a',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        titleFont: { family: 'Cormorant Garamond', size: 16 },
-                        bodyFont: { family: 'Montserrat', size: 14 },
-                        padding: 15,
-                        borderColor: '#b8974a',
-                        borderWidth: 1,
-                        callbacks: {
-                            label: function(context) { return '💰 ' + context.parsed.y + ' VNĐ'; }
+                lines.forEach((line, index) => {
+                    // Tách các cột dựa trên khoảng trắng hoặc Tab
+                    const columns = line.trim().split(/\s+/);
+                    
+                    if (columns.length >= 2) {
+                        // LƯU Ý: Tui đang giả sử Cột 0 là Giá Mở Cửa, Cột 1 là Giá Đóng Cửa.
+                        // Nếu trong file sv05.tsv của bà, cột Giá Mở Cửa nằm ở vị trí khác (vd: cột 2) thì bà đổi columns[0] thành columns[2] nhé.
+                        openPrices.push(parseFloat(columns[0]));
+                        closePrices.push(parseFloat(columns[1])); 
+                        labels.push(`Phiên ${index + 1}`);
+                    }
+                });
+
+                // 3. VẼ BIỂU ĐỒ 2 ĐƯỜNG GIÁ
+                const ctxChart = document.getElementById('luxuryChart').getContext('2d');
+                
+                let gradientClose = ctxChart.createLinearGradient(0, 0, 0, 400);
+                gradientClose.addColorStop(0, 'rgba(184, 151, 74, 0.4)'); // Vàng kim
+                gradientClose.addColorStop(1, 'rgba(184, 151, 74, 0.0)'); // Trong suốt
+
+                new Chart(ctxChart, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Giá Đóng Cửa',
+                                data: closePrices,
+                                borderColor: '#b8974a', // Đường vàng kim
+                                borderWidth: 2,
+                                backgroundColor: gradientClose, 
+                                fill: true,
+                                pointRadius: 0, pointHoverRadius: 6,
+                                tension: 0.3,
+                                order: 1
+                            },
+                            {
+                                label: 'Giá Mở Cửa',
+                                data: openPrices,
+                                borderColor: '#888888', // Đường xám
+                                borderWidth: 1.5,
+                                borderDash: [5, 5], 
+                                backgroundColor: 'transparent',
+                                fill: false,
+                                pointRadius: 0, pointHoverRadius: 6,
+                                tension: 0.3,
+                                order: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        interaction: { mode: 'index', intersect: false }, 
+                        plugins: {
+                            legend: { display: true, labels: { color: '#888', font: { family: 'Montserrat', size: 12 } } },
+                            tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.85)',
+                                titleFont: { family: 'Cormorant Garamond', size: 16 },
+                                bodyFont: { family: 'Montserrat', size: 14 },
+                                padding: 15,
+                                borderColor: '#b8974a', borderWidth: 1,
+                                callbacks: {
+                                    label: function(context) { return context.dataset.label + ': ' + context.parsed.y + ' VNĐ'; }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { 
+                                title: { display: true, text: 'Thời Gian (Phiên Giao Dịch)', color: '#888', font: { family: 'Montserrat', weight: 'bold' } },
+                                grid: { display: false }, 
+                                ticks: { color: '#888', maxTicksLimit: 15 } 
+                            },
+                            y: { 
+                                title: { display: true, text: 'Mức Giá (VNĐ)', color: '#888', font: { family: 'Montserrat', weight: 'bold' } },
+                                grid: { color: 'rgba(136, 136, 136, 0.2)', borderDash: [3, 3] }, 
+                                ticks: { color: '#888' } 
+                            }
                         }
                     }
-                },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#888', maxTicksLimit: 15 } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } }
-                }
+                });
+            } catch (error) {
+                console.error("Lỗi khi đọc file sv05.tsv: ", error);
+                alert("Không thể đọc được file sv05.tsv. Hãy đảm bảo file này nằm cùng thư mục với file index.html trên GitHub!");
             }
-        });
+        }
+
+        // Kích hoạt hàm đọc dữ liệu và vẽ
+        loadDataAndDrawChart();
     </script>
 </body>
 </html>
