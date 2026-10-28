@@ -5,20 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
     
+    <!-- Font chữ chuẩn phong cách Luxury / Fashion -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
+        /* TONE MÀU TỐI GIẢN (MINIMALIST) */
         :root {
-            --bg-color: #ffffff; 
-            --text-color: #000000; 
-            --border-color: #e0e0e0; 
+            --bg-color: #ffffff; /* Trắng tinh */
+            --text-color: #000000; /* Đen tuyền */
+            --border-color: #e0e0e0; /* Xám cực nhạt */
         }
 
         body.dark-mode {
-            --bg-color: #000000; 
-            --text-color: #ffffff; 
+            --bg-color: #000000; /* Đen tuyền */
+            --text-color: #ffffff; /* Trắng tinh */
             --border-color: #333333;
         }
 
@@ -31,9 +33,10 @@
             transition: 0.3s ease;
             line-height: 1.8;
             font-weight: 300;
-            overflow-x: hidden; 
+            overflow-x: hidden; /* Cắt bỏ dải đen/xám bị tràn ngang */
         }
 
+        /* NÚT ĐỔI NGÔN NGỮ & SÁNG TỐI */
         .controls {
             position: fixed;
             top: 20px;
@@ -41,7 +44,7 @@
             display: flex;
             gap: 20px;
             z-index: 1000;
-            mix-blend-mode: difference; 
+            mix-blend-mode: difference; /* Nút tự đổi màu tương phản với nền */
         }
 
         button {
@@ -62,10 +65,11 @@
             border-bottom: 1px solid #ffffff;
         }
 
+        /* KHU VỰC VIDEO BANNER (DIOR STYLE) */
         .hero-section {
             position: relative;
             width: 100%;
-            height: 90vh; 
+            height: 90vh; /* Độ cao bằng 90% màn hình */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -85,6 +89,7 @@
             z-index: 0;
         }
 
+        /* Lớp phủ làm sáng video nền (chỉ tối 10%) */
         .hero-overlay {
             position: absolute;
             top: 0;
@@ -99,7 +104,7 @@
             position: relative;
             z-index: 2;
             text-align: center;
-            color: var(--text-color); /* Tự động đổi màu: Đen ở Light mode, Trắng ở Dark mode */
+            color: var(--text-color); /* Tự động đổi màu chữ Đen/Trắng theo nền */
         }
 
         .hero-content h1 {
@@ -111,13 +116,15 @@
         }
 
         .hero-content p {
-            font-size: 18px; /* Đã tăng cỡ chữ từ 14px lên 18px */
+            font-size: 18px; /* Chữ to lên 1 chút */
             letter-spacing: 3px;
             text-transform: uppercase;
             margin: 0;
-            opacity: 0.9; /* Tăng độ đậm lên một chút để chữ sắc nét hơn */
+            opacity: 0.9;
+            white-space: nowrap; /* Bùa chú ép không rớt dòng */
         }
 
+        /* KHUNG CHỨA NỘI DUNG BÁO CÁO */
         .container { 
             max-width: 900px; 
             margin: 80px auto; 
@@ -145,6 +152,7 @@
             padding-bottom: 40px;
         }
 
+        /* TÙY CHỈNH VIDEO & ẢNH */
         .media-wrapper {
             width: 100%;
             margin: 40px 0;
@@ -166,9 +174,10 @@
             opacity: 0.6;
             text-align: center;
         }
+
     </style>
     
-    <!-- MÃ KHÓA BẢO MẬT ĐÃ ĐƯỢC CHUYỂN VÀO TRONG HEAD CHO CHUẨN -->
+    <!-- MÃ KHÓA BẢO MẬT TRANG WEB -->
     <script>
         var password = "py25ckdl"; 
         var input = prompt("Vui lòng nhập mật khẩu để truy cập báo cáo (Mật khẩu: py25ckdl):");
@@ -184,13 +193,15 @@
 
 <body>
 
+<!-- NÚT NGÔN NGỮ & SÁNG TỐI -->
 <div class="controls">
     <button id="langToggle">ENG</button>
     <button id="themeToggle">DARK</button>
 </div>
 
+<!-- KHU VỰC BANNER VIDEO NỀN -->
 <div class="hero-section">
-    <!-- Gán trực tiếp src vào thẻ video, xóa bỏ thẻ source bên trong -->
+    <!-- Gán thẳng video ban ngày 3.mp4 làm nền gốc -->
     <video id="heroVideo" class="hero-video" autoplay loop muted playsinline src="3.mp4"></video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -199,7 +210,10 @@
     </div>
 </div>
 
+<!-- NỘI DUNG CUỘN LÊN -->
 <div class="container">
+    
+    <!-- THÔNG TIN SINH VIÊN -->
     <div class="info-header">
         <p class="lang" 
            data-vi="Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005" 
@@ -213,6 +227,7 @@
         </p>
     </div>
 
+    <!-- PHẦN 1: VIDEO MÔ PHỎNG CHỨNG KHOÁN -->
     <h2 class="lang" data-vi="I. Mô Phỏng Động Học" data-en="I. Dynamic Simulation">I. Mô Phỏng Động Học</h2>
     <div class="media-wrapper">
         <video controls>
@@ -221,27 +236,30 @@
         <div class="caption lang" data-vi="Biến động giá theo từng phiên giao dịch" data-en="Price fluctuation per trading session">Biến động giá theo từng phiên giao dịch</div>
     </div>
 
+    <!-- PHẦN 2: THỐNG KÊ -->
     <h2 class="lang" data-vi="II. Phân Tích Thống Kê" data-en="II. Statistical Analysis">II. Phân Tích Thống Kê</h2>
-
-<!-- Đổi src thành đúng tên file bà chụp: cau1_bieudocot.png -->
     <div class="media-wrapper">
         <img src="cau1_bieudocot.png" alt="Biểu đồ cột">
         <div class="caption lang" data-vi="Mặt bằng giá trung bình theo tháng" data-en="Average price level by month">Mặt bằng giá trung bình theo tháng</div>
     </div>
-<!-- Đổi src thành đúng tên file bà chụp: cau1_boxplot.png -->
+    
     <div class="media-wrapper">
         <img src="cau1_boxplot.png" alt="Biểu đồ hộp">
         <div class="caption lang" data-vi="Phân bố biên độ dao động (Boxplot)" data-en="Volatility distribution (Boxplot)">Phân bố biên độ dao động (Boxplot)</div>
     </div>
+
+    <!-- PHẦN 3: HISTOGRAM -->
     <h2 class="lang" data-vi="III. Tổ Chức Đồ" data-en="III. Histogram">III. Tổ Chức Đồ</h2>
-<!-- CHÚ Ý CHỖ NÀY: Tên file mới của bà là 'histogram_quy_sv05.png' chứ không phải 'cau4_histogram.png' -->
     <div class="media-wrapper">
         <img src="histogram_quy_sv05.png" alt="Histogram">
         <div class="caption lang" data-vi="So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm" data-en="Price shift comparison: First vs Second half of the year">So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm</div>
     </div>
 
+</div>
+
+<!-- SCRIPT XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ & NGÔN NGỮ -->
 <script>
-    // 1. CHỨC NĂNG ĐỔI SÁNG/TỐI & VIDEO
+    // 1. Chức năng đổi Giao diện Sáng/Tối & Chuyển Video
     const themeToggle = document.getElementById('themeToggle');
     const heroVideo = document.getElementById('heroVideo');
 
@@ -251,18 +269,17 @@
         
         themeToggle.innerText = isDark ? 'LIGHT' : 'DARK';
 
-        // Gán trực tiếp src cho thẻ video
         if (isDark) {
-            heroVideo.src = '2.mp4'; 
+            heroVideo.src = '2.mp4'; // Sang giao diện tối thì bật video nền tối
         } else {
-            heroVideo.src = '3.mp4'; 
+            heroVideo.src = '3.mp4'; // Sang giao diện sáng thì bật video nền sáng
         }
         
         heroVideo.load();
         heroVideo.play();
     });
 
-    // 2. CHỨC NĂNG ĐỔI NGÔN NGỮ (Tui đã thêm lại cho bà)
+    // 2. Chức năng đổi Ngôn ngữ (Việt - Anh)
     let isEnglish = false;
     const langToggle = document.getElementById('langToggle');
     const langElements = document.querySelectorAll('.lang');
@@ -278,5 +295,3 @@
 
 </body>
 </html>
-
-
