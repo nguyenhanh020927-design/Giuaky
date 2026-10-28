@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
     
-    <!-- Font chữ Luxury -->
+    <!-- Font chữ Khoa học & Hiện đại -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
+    <!-- Thư viện Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- MÃ KHÓA BẢO MẬT -->
     <script>
         var password = "py25ckdl"; 
@@ -21,22 +24,22 @@
     </script>
 
     <style>
-        /* BIẾN MÀU SẮC LINH HOẠT - GLASSMORPHISM */
+        /* BẢNG MÀU KHOA HỌC & GLASSMORPHISM */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.1);
             --text-main: #111111;
             --text-muted: #555555;
-            --accent: #b8974a; /* Vàng kim tối giản */
-            --overlay: rgba(255, 255, 255, 0.3);
+            --accent: #b8974a;
+            --overlay: rgba(255, 255, 255, 0.4);
         }
 
         body.dark-mode {
-            --glass-bg: rgba(10, 10, 10, 0.75);
+            --glass-bg: rgba(15, 15, 15, 0.85);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
             --text-muted: #aaaaaa;
-            --overlay: rgba(0, 0, 0, 0.5);
+            --overlay: rgba(0, 0, 0, 0.6);
         }
 
         * { box-sizing: border-box; }
@@ -49,7 +52,7 @@
             transition: color 0.4s ease;
         }
 
-        /* --- VIDEO NỀN FULL MÀN HÌNH (LỚP DƯỚI CÙNG) --- */
+        /* --- VIDEO NỀN --- */
         #bgVideo {
             position: fixed;
             top: 50%; left: 50%;
@@ -59,122 +62,116 @@
             z-index: -2;
             object-fit: cover;
         }
-        
         #videoOverlay {
             position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background: var(--overlay);
-            backdrop-filter: blur(8px); /* Làm mờ video để tôn dữ liệu lên */
-            z-index: -1;
-            transition: 0.4s ease;
+            backdrop-filter: blur(12px); /* Tăng độ mờ nền để làm nổi bật số liệu */
+            z-index: -1; transition: 0.4s ease;
         }
 
-        /* --- NÚT BẤM GÓC PHẢI --- */
+        /* --- NÚT ĐIỀU KHIỂN --- */
         .controls { position: fixed; top: 25px; right: 40px; display: flex; gap: 20px; z-index: 1000; }
         button { 
             background: transparent; color: var(--text-main); border: none; 
             font-family: 'Montserrat'; font-size: 11px; letter-spacing: 2px; 
             cursor: pointer; padding-bottom: 3px; border-bottom: 1px solid transparent; 
-            transition: 0.3s; font-weight: 500;
+            transition: 0.3s; font-weight: 600;
         }
         button:hover { border-bottom: 1px solid var(--text-main); }
 
-        /* --- BỐ CỤC DASHBOARD CHÍNH --- */
+        /* --- BỐ CỤC TỔNG THỂ --- */
         .dashboard {
-            max-width: 1400px; /* Rộng hơn để chứa đa chiều dữ liệu */
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 40px 30px;
+            padding: 50px 30px;
         }
 
-        /* TÊN BÁO CÁO & THÔNG TIN SINH VIÊN */
-        .header-section { text-align: left; margin-bottom: 40px; padding-top: 20px;}
-        .header-section h1 { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 400; margin: 0 0 10px 0; letter-spacing: 1px;}
-        .student-info { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+        /* HEADER */
+        .header-section { margin-bottom: 40px; border-bottom: 2px solid var(--accent); padding-bottom: 20px; }
+        .header-section h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; margin: 0 0 10px 0; font-weight: 600; }
+        .student-info { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 500; }
 
-        /* DÀN KPI CARDS CỰC CHẤT */
+        /* KPI CARDS */
         .kpi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 20px; margin-bottom: 40px;
         }
-        
         .kpi-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            padding: 25px 20px;
-            text-align: left;
-            backdrop-filter: blur(20px); /* Hiệu ứng kính */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            padding: 20px;
+            border-radius: 8px; /* Bo góc nhẹ chuẩn khoa học */
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
         }
-        .kpi-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .kpi-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 10px;}
-        .kpi-val { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; margin-bottom: 5px; }
+        .kpi-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .kpi-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+        .kpi-val { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 600; margin-bottom: 4px; }
         .kpi-sub { font-size: 11px; opacity: 0.8; }
-        
         .up { color: #2e7d32; } body.dark-mode .up { color: #4caf50; }
         .down { color: #c62828; } body.dark-mode .down { color: #ef5350; }
 
-        /* KHU VỰC ĐA CHIỀU (GRID 2 CỘT) */
+        /* LƯỚI BỐ CỤC BIỂU ĐỒ KHOA HỌC */
         .charts-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 1fr; /* Chia 2 cột đều nhau */
+            gap: 25px;
         }
         
-        /* Tấm kính chứa biểu đồ */
+        /* Cục Chart.js trải dài 2 cột (Centerpiece) */
+        .full-width-panel {
+            grid-column: 1 / -1; 
+        }
+
         .glass-panel {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            padding: 30px;
+            padding: 25px;
+            border-radius: 8px;
             backdrop-filter: blur(20px);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex; flex-direction: column;
         }
 
-        .panel-header { font-family: 'Cormorant Garamond', serif; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; text-align: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;}
+        .panel-header { 
+            font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; 
+            margin-bottom: 20px; text-align: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; 
+        }
         
-        /* CÔNG NGHỆ HOVER ẢNH BÁ ĐẠO */
+        /* KHUNG CHỨA ẢNH/VIDEO THU NHỎ, CĂN GIỮA */
         .img-container {
-            position: relative;
             width: 100%;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.02); /* Phông nền nhạt tách biệt ảnh với thẻ */
+            border-radius: 4px;
+            padding: 15px;
+            flex-grow: 1;
+        }
+        body.dark-mode .img-container { background: rgba(255,255,255,0.02); }
+
+        .img-container img, .img-container video {
+            max-width: 100%;
+            max-height: 300px; /* KHỐNG CHẾ CHIỀU CAO: Ảnh không bao giờ bị bự quá mức */
+            object-fit: contain;
             border: 1px solid var(--glass-border);
         }
-        .img-container img, .img-container video {
-            width: 100%;
-            display: block;
-            transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .img-container:hover img { transform: scale(1.05); } /* Zoom nhẹ khi rê chuột */
-        
-        /* Lớp phủ Insight hiển thị khi Hover */
-        .insight-overlay {
-            position: absolute;
-            bottom: -100%; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); color: #fff;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: bottom 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-            padding: 20px; text-align: center;
-        }
-        .img-container:hover .insight-overlay { bottom: 0; } /* Kéo chuột vào là thông số trượt lên */
-        .insight-overlay h4 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--accent); margin: 0 0 10px 0; }
-        .insight-overlay p { font-size: 13px; line-height: 1.8; margin: 0; }
 
-        .caption { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; text-align: center; color: var(--text-muted); }
+        .caption { 
+            font-size: 12px; text-transform: uppercase; letter-spacing: 1px; 
+            margin-top: 20px; text-align: center; color: var(--text-muted); font-weight: 500;
+        }
 
-        /* Responsive cho điện thoại */
         @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr; } }
     </style>
-<!-- Thư viện Chart.js cho biểu đồ tương tác -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-    <!-- VIDEO NỀN (Tự đổi tùy chế độ sáng/tối) -->
+
+    <!-- VIDEO NỀN -->
     <video id="bgVideo" autoplay loop muted playsinline src="3.mp4"></video>
     <div id="videoOverlay"></div>
 
@@ -185,112 +182,95 @@
 
     <div class="dashboard">
         
-        <!-- HEADER CỰC NGHỆ THUẬT -->
+        <!-- HEADER KHOA HỌC -->
         <div class="header-section">
-            <h1 class="lang" data-vi="Phân Tích Mô Phỏng Giá Chứng Khoán" data-en="Stock Price Simulation Analysis">Phân Tích Mô Phỏng Giá Chứng Khoán</h1>
-            <div class="student-info lang" data-vi="Sinh viên: Nguyễn Thị Hạnh &nbsp;|&nbsp; 25CKDL &nbsp;|&nbsp; MS: 3110525005 &nbsp;|&nbsp; Mã DL: abc-5" data-en="Student: Nguyen Thi Hanh | 25CKDL | ID: 3110525005 | Data: abc-5">
-                Sinh viên: Nguyễn Thị Hạnh &nbsp;|&nbsp; 25CKDL &nbsp;|&nbsp; MS: 3110525005 &nbsp;|&nbsp; Mã DL: abc-5
+            <h1 class="lang" data-vi="Báo Cáo Giữa Kỳ: Mô Phỏng Phân Tích Chứng Khoán" data-en="Midterm Report: Stock Analysis Simulation">Báo Cáo Giữa Kỳ: Mô Phỏng Phân Tích Chứng Khoán</h1>
+            <div class="student-info lang" data-vi="Thực hiện: Nguyễn Thị Hạnh &nbsp;|&nbsp; Lớp: 25CKDL &nbsp;|&nbsp; MSSV: 3110525005 &nbsp;|&nbsp; Dữ liệu: abc-5" data-en="By: Nguyen Thi Hanh | Class: 25CKDL | ID: 3110525005 | Data: abc-5">
+                Thực hiện: Nguyễn Thị Hạnh &nbsp;|&nbsp; Lớp: 25CKDL &nbsp;|&nbsp; MSSV: 3110525005 &nbsp;|&nbsp; Dữ liệu: abc-5
             </div>
         </div>
 
-        <!-- 5 THẺ KPI TÓM TẮT ĐÁNH BẠI "PINK FINANCIAL PRO" -->
+        <!-- 5 THẺ KPI TÓM TẮT -->
         <div class="kpi-grid">
             <div class="kpi-card">
-                <div class="kpi-title lang" data-vi="Giá Đỉnh Chu Kỳ (Cao Nhất)" data-en="Cycle Peak (Highest)">Giá Đỉnh Chu Kỳ (Cao Nhất)</div>
+                <div class="kpi-title lang" data-vi="Giá Cao Nhất (Peak)" data-en="Highest Price (Peak)">Giá Cao Nhất (Peak)</div>
                 <div class="kpi-val up">132.80</div>
-                <div class="kpi-sub lang" data-vi="▲ Thiết lập tại Phiên 165" data-en="▲ Reached at Session 165">▲ Thiết lập tại Phiên 165</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-title lang" data-vi="Giá Đáy Chu Kỳ (Thấp Nhất)" data-en="Cycle Bottom (Lowest)">Giá Đáy Chu Kỳ (Thấp Nhất)</div>
+                <div class="kpi-title lang" data-vi="Giá Thấp Nhất (Bottom)" data-en="Lowest Price (Bottom)">Giá Thấp Nhất (Bottom)</div>
                 <div class="kpi-val down">89.40</div>
-                <div class="kpi-sub lang" data-vi="▼ Thiết lập tại Phiên 365" data-en="▼ Reached at Session 365">▼ Thiết lập tại Phiên 365</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-title lang" data-vi="Giá Đóng Cửa Trung Bình" data-en="Average Close Price">Giá Đóng Cửa Trung Bình</div>
+                <div class="kpi-title lang" data-vi="Trung Bình Giá Đóng Cửa" data-en="Average Close Price">Trung Bình Giá Đóng Cửa</div>
                 <div class="kpi-val">115.60</div>
-                <div class="kpi-sub lang" data-vi="Trung bình trong 365 phiên" data-en="Average across 365 sessions">Trung bình trong 365 phiên</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-title lang" data-vi="Mức Sụt Giảm (Max Drawdown)" data-en="Max Drawdown">Mức Sụt Giảm (Max Drawdown)</div>
+                <div class="kpi-title lang" data-vi="Mức Sụt Giảm Lớn Nhất" data-en="Max Drawdown">Mức Sụt Giảm Lớn Nhất</div>
                 <div class="kpi-val down">-32.6%</div>
-                <div class="kpi-sub lang" data-vi="Sụt giảm từ Đỉnh về Đáy" data-en="Drop from Peak to Bottom">Sụt giảm từ Đỉnh về Đáy</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-title lang" data-vi="Quy Mô Dữ Liệu" data-en="Data Scale">Quy Mô Dữ Liệu</div>
-                <div class="kpi-val">365</div>
-                <div class="kpi-sub lang" data-vi="Phiên giao dịch (Mã abc-5)" data-en="Trading sessions (abc-5)">Phiên giao dịch (Mã abc-5)</div>
+                <div class="kpi-title lang" data-vi="Mẫu Dữ Liệu TSV" data-en="TSV Data Sample">Mẫu Dữ Liệu TSV</div>
+                <div class="kpi-val">365 <span style="font-size:14px; font-weight:400;">Phiên</span></div>
             </div>
         </div>
 
-        <!-- LƯỚI ĐA CHIỀU (GRID) CHỨA BIỂU ĐỒ & VIDEO -->
-<!-- TÍNH NĂNG ĐIỂM CỘNG: BIỂU ĐỒ TƯƠNG TÁC TOÀN CẢNH -->
-        <div class="glass-panel" style="margin-bottom: 30px;">
-            <div class="panel-header lang" data-vi="Biểu Đồ Diễn Biến Giá" data-en="Interactive Price Action">Biểu Đồ Diễn Biến Giá</div>
+        <!-- LƯỚI BỐ CỤC CHÍNH -->
+        <div class="charts-grid">
             
-            <!-- Đã đổi background thành transparent để xóa màu xám xịt -->
-            <div class="img-container" style="padding: 20px 20px 0 20px; background: transparent;">
-                <canvas id="luxuryChart" height="110"></canvas>
+            <!-- BIỂU ĐỒ TƯƠNG TÁC (Chiếm trọn 2 cột trên cùng) -->
+            <div class="glass-panel full-width-panel">
+                <div class="panel-header lang" data-vi="Diễn Biến Giá Trực Quan (Interactive Chart)" data-en="Visual Price Action (Interactive Chart)">Diễn Biến Giá Trực Quan (Interactive Chart)</div>
+                <div class="img-container" style="background: transparent; border: none;">
+                    <!-- Chiều cao canvas khống chế không quá lớn -->
+                    <canvas id="luxuryChart" style="max-height: 350px; width: 100%;"></canvas>
+                </div>
+                <div class="caption lang" data-vi="Biểu đồ được vẽ tự động từ file dữ liệu sv05.tsv (365 phiên)" data-en="Chart automatically rendered from sv05.tsv dataset (365 sessions)">Biểu đồ được vẽ tự động từ file dữ liệu sv05.tsv (365 phiên)</div>
             </div>
-            
-            <div class="caption lang" data-vi="Rê chuột vào biểu đồ để đối chiếu Giá Mở Cửa & Đóng Cửa (365 phiên)" data-en="Hover chart to compare Open & Close Prices (365 sessions)">Rê chuột vào biểu đồ để đối chiếu Giá Mở Cửa & Đóng Cửa (365 phiên)</div>
-        </div>
-            
+
             <!-- Ô SỐ 1: VIDEO MÔ PHỎNG -->
             <div class="glass-panel">
-                <div class="panel-header lang" data-vi="▶ Video Mô Phỏng Động Học" data-en="▶ Dynamic Simulation Video">▶ Video Mô Phỏng Động Học</div>
+                <div class="panel-header lang" data-vi="Mô Phỏng Động Học" data-en="Dynamic Simulation">Mô Phỏng Động Học</div>
                 <div class="img-container">
                     <video controls muted autoplay loop>
                         <source src="abc10.mp4" type="video/mp4">
                     </video>
                 </div>
-                <div class="caption lang" data-vi="Tái hiện diễn biến giá thực tế qua 365 phiên giao dịch" data-en="Real-time price action replay over 365 sessions">Tái hiện diễn biến giá thực tế qua 365 phiên giao dịch</div>
+                <div class="caption lang" data-vi="Tái hiện diễn biến giá qua 365 phiên giao dịch" data-en="Price action replay over 365 sessions">Tái hiện diễn biến giá qua 365 phiên giao dịch</div>
             </div>
 
-            <!-- Ô SỐ 2: BIỂU ĐỒ CỘT VỚI HOVER INSIGHT -->
+            <!-- Ô SỐ 2: BIỂU ĐỒ CỘT -->
             <div class="glass-panel">
-                <div class="panel-header lang" data-vi="Biểu Đồ Mặt Bằng Giá Tháng" data-en="Monthly Price Level Chart">Biểu Đồ Mặt Bằng Giá Tháng</div>
+                <div class="panel-header lang" data-vi="Mặt Bằng Giá Trung Bình Tháng" data-en="Monthly Average Price Level">Mặt Bằng Giá Trung Bình Tháng</div>
                 <div class="img-container">
+                    <!-- Ảnh sẽ tự động thu nhỏ lại vừa vặn khung -->
                     <img src="cau1_bieudocot.png" alt="Biểu đồ cột">
-                    <!-- Bảng trượt lên khi rê chuột -->
-                    <div class="insight-overlay">
-                        <h4 class="lang" data-vi="Insight Chuyên Sâu" data-en="Deep Insight">Insight Chuyên Sâu</h4>
-                        <p class="lang" data-vi="Tháng 7 ghi nhận mặt bằng giá cao nhất.<br>Xu hướng chốt lời mạnh xuất hiện vào quý cuối năm." data-en="July recorded the highest price level.<br>Strong profit-taking trend appeared in Q4.">Tháng 7 ghi nhận mặt bằng giá cao nhất.<br>Xu hướng chốt lời mạnh xuất hiện vào quý cuối năm.</p>
-                    </div>
                 </div>
-                <div class="caption lang" data-vi="Rê chuột vào ảnh để xem Insight phân tích" data-en="Hover image for analytical insight">Rê chuột vào ảnh để xem Insight phân tích</div>
+                <div class="caption lang" data-vi="Trích xuất từ thư viện Matplotlib & Pandas" data-en="Extracted via Matplotlib & Pandas">Trích xuất từ thư viện Matplotlib & Pandas</div>
             </div>
 
-            <!-- Ô SỐ 3: BOXPLOT VỚI HOVER INSIGHT -->
+            <!-- Ô SỐ 3: BOXPLOT -->
             <div class="glass-panel">
-                <div class="panel-header lang" data-vi="Phân Bố Biên Độ Dao Động (Boxplot)" data-en="Volatility Distribution (Boxplot)">Phân Bố Biên Độ Dao Động (Boxplot)</div>
+                <div class="panel-header lang" data-vi="Phân Bố Biên Độ (Boxplot)" data-en="Volatility Distribution (Boxplot)">Phân Bố Biên Độ (Boxplot)</div>
                 <div class="img-container">
                     <img src="cau1_boxplot.png" alt="Biểu đồ hộp">
-                    <div class="insight-overlay">
-                        <h4 class="lang" data-vi="Nhận Diện Biến Động" data-en="Volatility Detection">Nhận Diện Biến Động</h4>
-                        <p class="lang" data-vi="Biên độ râu nến dài cho thấy sự giằng co phe Mua/Bán.<br>Các điểm Outlier cảnh báo phiên đột biến thanh khoản." data-en="Long wicks indicate strong Buy/Sell struggle.<br>Outliers warn of liquidity breakout sessions.">Biên độ râu nến dài cho thấy sự giằng co phe Mua/Bán.<br>Các điểm Outlier cảnh báo phiên đột biến thanh khoản.</p>
-                    </div>
                 </div>
-                <div class="caption lang" data-vi="Khoảng tứ phân vị và các điểm dị biệt (Outliers)" data-en="Interquartile range and Outliers">Khoảng tứ phân vị và các điểm dị biệt (Outliers)</div>
+                <div class="caption lang" data-vi="Thể hiện khoảng tứ phân vị và các phiên đột biến" data-en="Shows interquartile range and breakout sessions">Thể hiện khoảng tứ phân vị và các phiên đột biến</div>
             </div>
 
-            <!-- Ô SỐ 4: HISTOGRAM VỚI HOVER INSIGHT -->
+            <!-- Ô SỐ 4: HISTOGRAM -->
             <div class="glass-panel">
-                <div class="panel-header lang" data-vi="Tổ Chức Đồ So Sánh Nửa Năm" data-en="Half-year Comparison Histogram">Tổ Chức Đồ So Sánh Nửa Năm</div>
+                <div class="panel-header lang" data-vi="Tổ Chức Đồ Nửa Đầu / Cuối Năm" data-en="Half-year Comparison Histogram">Tổ Chức Đồ Nửa Đầu / Cuối Năm</div>
                 <div class="img-container">
                     <img src="histogram_quy_sv05.png" alt="Histogram">
-                    <div class="insight-overlay">
-                        <h4 class="lang" data-vi="Dịch Chuyển Trọng Tâm Giá" data-en="Price Gravity Shift">Dịch Chuyển Trọng Tâm Giá</h4>
-                        <p class="lang" data-vi="Phân phối chuẩn bị lệch trái trong nửa cuối năm.<br>Khối lượng kẹp hàng vùng đỉnh khá lớn." data-en="Normal distribution skewed left in H2.<br>Heavy volume trapped at the peak.">Phân phối chuẩn bị lệch trái trong nửa cuối năm.<br>Khối lượng kẹp hàng vùng đỉnh khá lớn.</p>
-                    </div>
                 </div>
-                <div class="caption lang" data-vi="Đánh giá xác suất và mật độ tập trung giá trị" data-en="Probability and value density assessment">Đánh giá xác suất và mật độ tập trung giá trị</div>
+                <div class="caption lang" data-vi="Phân tích phân phối chuẩn của mật độ giá trị" data-en="Normal distribution analysis of value density">Phân tích phân phối chuẩn của mật độ giá trị</div>
             </div>
 
         </div>
     </div>
 
     <script>
-        // CHUYỂN ĐỔI CHẾ ĐỘ SÁNG TỐI (Tương tác với Video Nền & Màu Glass)
+        // CHUYỂN ĐỔI CHẾ ĐỘ SÁNG TỐI
         const themeToggle = document.getElementById('themeToggle');
         const bgVideo = document.getElementById('bgVideo');
 
@@ -298,13 +278,11 @@
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
             themeToggle.innerText = isDark ? 'LIGHT' : 'DARK';
-            
-            // Đổi background video mượt mà
             bgVideo.src = isDark ? '2.mp4' : '3.mp4'; 
             bgVideo.load(); bgVideo.play();
         });
 
-        // CHUYỂN ĐỔI NGÔN NGỮ ĐA CHIỀU
+        // CHUYỂN ĐỔI NGÔN NGỮ
         let isEnglish = false;
         const langToggle = document.getElementById('langToggle');
         const langElements = document.querySelectorAll('.lang');
@@ -316,40 +294,31 @@
                 el.innerHTML = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-vi');
             });
         });
-    </script>
-<!-- SCRIPT TỰ ĐỘNG ĐỌC FILE TSV VÀ VẼ BIỂU ĐỒ CHART.JS -->
-    <script>
+
+        // SCRIPT ĐỌC TSV VÀ VẼ BIỂU ĐỒ (CHUẨN KHOA HỌC)
         async function loadDataAndDrawChart() {
             try {
-                // 1. TỰ ĐỘNG GỌI FILE sv05.tsv TỪ GITHUB
                 const response = await fetch('sv05.tsv');
                 const dataText = await response.text();
-
-                // 2. XỬ LÝ DỮ LIỆU TSV
                 const lines = dataText.trim().split('\n');
                 const openPrices = [];
                 const closePrices = [];
                 const labels = [];
 
                 lines.forEach((line, index) => {
-                    // Tách các cột dựa trên khoảng trắng hoặc Tab
                     const columns = line.trim().split(/\s+/);
-                    
-                    if (columns.length >= 2) {
-                        // LƯU Ý: Tui đang giả sử Cột 0 là Giá Mở Cửa, Cột 1 là Giá Đóng Cửa.
-                        // Nếu trong file sv05.tsv của bà, cột Giá Mở Cửa nằm ở vị trí khác (vd: cột 2) thì bà đổi columns[0] thành columns[2] nhé.
-                        openPrices.push(parseFloat(columns[0]));
-                        closePrices.push(parseFloat(columns[1])); 
+                    if (columns.length >= 7) {
+                        openPrices.push(parseFloat(columns[0])); // Cột Giá Mở Cửa (Cột 1)
+                        closePrices.push(parseFloat(columns[6])); // Cột Giá Đóng Cửa (Cột 7)
                         labels.push(`Phiên ${index + 1}`);
                     }
                 });
 
-                // 3. VẼ BIỂU ĐỒ 2 ĐƯỜNG GIÁ
                 const ctxChart = document.getElementById('luxuryChart').getContext('2d');
                 
-                let gradientClose = ctxChart.createLinearGradient(0, 0, 0, 400);
-                gradientClose.addColorStop(0, 'rgba(184, 151, 74, 0.4)'); // Vàng kim
-                gradientClose.addColorStop(1, 'rgba(184, 151, 74, 0.0)'); // Trong suốt
+                // Set Chart default colors based on theme
+                Chart.defaults.color = '#888';
+                Chart.defaults.font.family = 'Montserrat';
 
                 new Chart(ctxChart, {
                     type: 'line',
@@ -358,40 +327,41 @@
                         datasets: [
                             {
                                 label: 'Giá Đóng Cửa',
-                                data: closePrices,
-                                borderColor: '#b8974a', // Đường vàng kim
+                                data: closePrices, 
+                                borderColor: '#b8974a', 
                                 borderWidth: 2,
-                                backgroundColor: gradientClose, 
+                                backgroundColor: 'rgba(184, 151, 74, 0.1)', 
                                 fill: true,
-                                pointRadius: 0, pointHoverRadius: 6,
-                                tension: 0.3,
+                                pointRadius: 0, pointHoverRadius: 5,
+                                tension: 0.1, // Đường nét gãy gọn, dứt khoát chuẩn toán học
                                 order: 1
                             },
                             {
                                 label: 'Giá Mở Cửa',
-                                data: openPrices,
-                                borderColor: '#888888', // Đường xám
+                                data: openPrices, 
+                                borderColor: '#777777', 
                                 borderWidth: 1.5,
-                                borderDash: [5, 5], 
+                                borderDash: [4, 4], 
                                 backgroundColor: 'transparent',
                                 fill: false,
-                                pointRadius: 0, pointHoverRadius: 6,
-                                tension: 0.3,
+                                pointRadius: 0, pointHoverRadius: 5,
+                                tension: 0.1,
                                 order: 2
                             }
                         ]
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false, // Để canvas tự co giãn theo khung max-height 350px
                         interaction: { mode: 'index', intersect: false }, 
                         plugins: {
-                            legend: { display: true, labels: { color: '#888', font: { family: 'Montserrat', size: 12 } } },
+                            legend: { display: true, position: 'top' },
                             tooltip: {
-                                backgroundColor: 'rgba(0,0,0,0.85)',
-                                titleFont: { family: 'Cormorant Garamond', size: 16 },
-                                bodyFont: { family: 'Montserrat', size: 14 },
-                                padding: 15,
-                                borderColor: '#b8974a', borderWidth: 1,
+                                backgroundColor: 'rgba(15,15,15,0.9)',
+                                titleFont: { family: 'Montserrat', size: 14, weight: 'bold' },
+                                bodyFont: { family: 'Montserrat', size: 13 },
+                                padding: 12,
+                                borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
                                 callbacks: {
                                     label: function(context) { return context.dataset.label + ': ' + context.parsed.y + ' VNĐ'; }
                                 }
@@ -399,25 +369,19 @@
                         },
                         scales: {
                             x: { 
-                                title: { display: true, text: 'Thời Gian (Phiên Giao Dịch)', color: '#888', font: { family: 'Montserrat', weight: 'bold' } },
                                 grid: { display: false }, 
-                                ticks: { color: '#888', maxTicksLimit: 15 } 
+                                ticks: { maxTicksLimit: 20 } 
                             },
                             y: { 
-                                title: { display: true, text: 'Mức Giá (VNĐ)', color: '#888', font: { family: 'Montserrat', weight: 'bold' } },
-                                grid: { color: 'rgba(136, 136, 136, 0.2)', borderDash: [3, 3] }, 
-                                ticks: { color: '#888' } 
+                                grid: { color: 'rgba(128,128,128,0.15)', borderDash: [3, 3] }
                             }
                         }
                     }
                 });
             } catch (error) {
-                console.error("Lỗi khi đọc file sv05.tsv: ", error);
-                alert("Không thể đọc được file sv05.tsv. Hãy đảm bảo file này nằm cùng thư mục với file index.html trên GitHub!");
+                console.error("Lỗi đọc file sv05.tsv: ", error);
             }
         }
-
-        // Kích hoạt hàm đọc dữ liệu và vẽ
         loadDataAndDrawChart();
     </script>
 </body>
