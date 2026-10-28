@@ -5,203 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
     
-    <!-- Font chữ chuẩn phong cách Luxury / Fashion -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
-        /* TONE MÀU TỐI GIẢN (MINIMALIST) */
         :root {
-            --bg-color: #ffffff; /* Trắng tinh */
-            --text-color: #000000; /* Đen tuyền */
-            --border-color: #e0e0e0; /* Xám cực nhạt */
+            --bg-color: #ffffff; 
+            --text-color: #000000; 
+            --border-color: #e0e0e0; 
+            --card-bg: #f9f9f9;
+            --accent: #2c3e50;
         }
 
         body.dark-mode {
-            --bg-color: #000000; /* Đen tuyền */
-            --text-color: #ffffff; /* Trắng tinh */
+            --bg-color: #000000; 
+            --text-color: #ffffff; 
             --border-color: #333333;
+            --card-bg: #111111;
+            --accent: #d4af37;
         }
 
         body { 
             font-family: 'Montserrat', sans-serif; 
             background-color: var(--bg-color); 
             color: var(--text-color); 
-            margin: 0; 
-            padding: 0; 
+            margin: 0; padding: 0; 
             transition: 0.3s ease;
-            line-height: 1.8;
-            font-weight: 300;
-            overflow-x: hidden; /* Cắt bỏ dải đen/xám bị tràn ngang */
+            overflow-x: hidden; 
         }
 
-        /* NÚT ĐỔI NGÔN NGỮ & SÁNG TỐI */
-        .controls {
-            position: fixed;
-            top: 20px;
-            right: 30px;
-            display: flex;
-            gap: 20px;
-            z-index: 1000;
-            mix-blend-mode: difference; /* Nút tự đổi màu tương phản với nền */
-        }
+        /* --- CÁC HIỆU ỨNG CŨ (Nút bấm, Banner, Typography) GIỮ NGUYÊN --- */
+        .controls { position: fixed; top: 20px; right: 30px; display: flex; gap: 20px; z-index: 1000; mix-blend-mode: difference; }
+        button { background: transparent; color: #fff; border: none; font-family: 'Montserrat'; font-size: 12px; letter-spacing: 2px; cursor: pointer; padding-bottom: 3px; border-bottom: 1px solid transparent; transition: 0.3s; }
+        button:hover { border-bottom: 1px solid #fff; }
+        .hero-section { position: relative; width: 100%; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .hero-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.1); z-index: 1; }
+        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--text-color); }
+        .hero-content h1 { font-family: 'Cormorant Garamond', serif; font-size: 50px; letter-spacing: 2px; margin: 0 0 10px 0; }
+        .hero-content p { font-size: 18px; letter-spacing: 3px; text-transform: uppercase; margin: 0; white-space: nowrap; }
 
-        button {
-            background: transparent;
-            color: #ffffff;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            border-bottom: 1px solid transparent;
-            padding-bottom: 3px;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            border-bottom: 1px solid #ffffff;
-        }
-
-        /* KHU VỰC VIDEO BANNER (DIOR STYLE) */
-        .hero-section {
-            position: relative;
+        /* ================= TÍNH NĂNG MỚI: STOCK TICKER TAPE ================= */
+        .ticker-wrap {
             width: 100%;
-            height: 90vh; /* Độ cao bằng 90% màn hình */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            padding: 10px 0;
             overflow: hidden;
-        }
-
-        .hero-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
-            border: none;
-            z-index: 0;
-        }
-
-        /* Lớp phủ làm sáng video nền (chỉ tối 10%) */
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.1); 
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            color: var(--text-color); /* Tự động đổi màu chữ Đen/Trắng theo nền */
-        }
-
-        .hero-content h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 50px;
-            font-weight: 400;
-            letter-spacing: 2px;
-            margin: 0 0 10px 0;
-        }
-
-        .hero-content p {
-            font-size: 18px; /* Chữ to lên 1 chút */
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin: 0;
-            opacity: 0.9;
-            white-space: nowrap; /* Bùa chú ép không rớt dòng */
-        }
-
-        /* KHUNG CHỨA NỘI DUNG BÁO CÁO */
-        .container { 
-            max-width: 900px; 
-            margin: 80px auto; 
-            padding: 0 20px;
-        }
-
-        h2 { 
-            font-family: 'Cormorant Garamond', serif; 
-            font-size: 28px;
-            font-weight: 400;
-            text-align: center; 
-            margin-top: 60px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
+            white-space: nowrap;
+            box-sizing: border-box;
+            font-size: 13px;
+            font-weight: 500;
             letter-spacing: 1px;
-        }
-
-        .info-header { 
-            text-align: center; 
-            font-size: 13px; 
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 80px;
+            border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 40px;
         }
+        .ticker { display: inline-block; animation: ticker 25s linear infinite; }
+        .ticker-item { padding: 0 30px; display: inline-block; }
+        .up { color: #00ff00; } /* Màu xanh tăng giá */
+        .down { color: #ff4444; } /* Màu đỏ giảm giá */
+        body:not(.dark-mode) .up { color: #008800; } 
+        body:not(.dark-mode) .down { color: #cc0000; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
 
-        /* TÙY CHỈNH VIDEO & ẢNH */
-        .media-wrapper {
-            width: 100%;
-            margin: 40px 0;
+        /* ================= TÍNH NĂNG MỚI: KPI CARDS ================= */
+        .kpi-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 40px 0 60px 0;
+        }
+        .kpi-card {
+            flex: 1;
+            background: var(--card-bg);
+            padding: 30px 20px;
             text-align: center;
-        }
-
-        video, img { 
-            width: 100%; 
-            max-width: 850px; 
             border: 1px solid var(--border-color);
-            border-radius: 0; 
+            transition: 0.4s ease;
+            cursor: crosshair;
         }
+        .kpi-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--text-color); }
+        body.dark-mode .kpi-card:hover { box-shadow: 0 15px 30px rgba(255,255,255,0.05); }
+        .kpi-value { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 600; margin-bottom: 5px; }
+        .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
 
-        .caption {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 15px;
-            opacity: 0.6;
-            text-align: center;
-        }
-
+        /* --- CONTAINER VÀ MEDIA GIỮ NGUYÊN --- */
+        .container { max-width: 900px; margin: 50px auto; padding: 0 20px; }
+        h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; text-align: center; margin-top: 80px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 1px; }
+        .info-header { text-align: center; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 50px; border-bottom: 1px solid var(--border-color); padding-bottom: 40px; }
+        .media-wrapper { width: 100%; margin: 40px 0; text-align: center; }
+        video, img, iframe { width: 100%; max-width: 850px; border: 1px solid var(--border-color); border-radius: 0; }
+        .caption { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; opacity: 0.6; text-align: center; }
     </style>
-    
-    <!-- MÃ KHÓA BẢO MẬT TRANG WEB -->
-    <script>
-        var password = "py25ckdl"; 
-        var input = prompt("Vui lòng nhập mật khẩu để truy cập báo cáo (Mật khẩu: py25ckdl):");
-        
-        if (input !== password) {
-            alert("Sai mật khẩu! Bạn không có quyền truy cập trang web này.");
-            window.location.href = "https://www.google.com"; 
-        } else {
-            alert("Mật khẩu chính xác! Chào mừng đến với Báo cáo phân tích của Nguyễn Thị Hạnh.");
-        }
-    </script>
 </head>
-
 <body>
 
-<!-- NÚT NGÔN NGỮ & SÁNG TỐI -->
 <div class="controls">
     <button id="langToggle">ENG</button>
     <button id="themeToggle">DARK</button>
 </div>
 
-<!-- KHU VỰC BANNER VIDEO NỀN -->
 <div class="hero-section">
-    <!-- Gán thẳng video ban ngày 3.mp4 làm nền gốc -->
     <video id="heroVideo" class="hero-video" autoplay loop muted playsinline src="3.mp4"></video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -210,24 +115,49 @@
     </div>
 </div>
 
-<!-- NỘI DUNG CUỘN LÊN -->
+<!-- THANH CUỘN GIÁ CHỨNG KHOÁN (TICKER TAPE) -->
+<div class="ticker-wrap">
+    <div class="ticker">
+        <!-- Khối 1 -->
+        <div class="ticker-item">TICKER: ABC-5</div>
+        <div class="ticker-item">VOL: 1.2M</div>
+        <div class="ticker-item">OPEN: 124.50</div>
+        <div class="ticker-item up">HIGH: 132.80 ▲ +6.6%</div>
+        <div class="ticker-item down">LOW: 121.10 ▼ -2.7%</div>
+        <div class="ticker-item">CLOSE: 130.20</div>
+        <!-- Copy lại khối 1 để tạo vòng lặp vô tận mượt mà -->
+        <div class="ticker-item">TICKER: ABC-5</div>
+        <div class="ticker-item">VOL: 1.2M</div>
+        <div class="ticker-item">OPEN: 124.50</div>
+        <div class="ticker-item up">HIGH: 132.80 ▲ +6.6%</div>
+        <div class="ticker-item down">LOW: 121.10 ▼ -2.7%</div>
+        <div class="ticker-item">CLOSE: 130.20</div>
+    </div>
+</div>
+
 <div class="container">
-    
-    <!-- THÔNG TIN SINH VIÊN -->
     <div class="info-header">
-        <p class="lang" 
-           data-vi="Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005" 
-           data-en="Nguyen Thi Hanh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; ID: 3110525005">
-           Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005
-        </p>
-        <p class="lang" 
-           data-vi="Mã dữ liệu: abc-5" 
-           data-en="Data Code: abc-5">
-           Mã dữ liệu: abc-5
-        </p>
+        <p class="lang" data-vi="Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005" data-en="Nguyen Thi Hanh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; ID: 3110525005">Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005</p>
+        <p class="lang" data-vi="Mã dữ liệu: abc-5" data-en="Data Code: abc-5">Mã dữ liệu: abc-5</p>
     </div>
 
-    <!-- PHẦN 1: VIDEO MÔ PHỎNG CHỨNG KHOÁN -->
+    <!-- CÁC THẺ KPI HIGHLIGHT DỮ LIỆU -->
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-value">365</div>
+            <div class="kpi-label lang" data-vi="Ngày Giao Dịch" data-en="Trading Days">Ngày Giao Dịch</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value up">▲ 132.8</div>
+            <div class="kpi-label lang" data-vi="Giá Cao Nhất (Peak)" data-en="Highest Price (Peak)">Giá Cao Nhất (Peak)</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value down">▼ 89.4</div>
+            <div class="kpi-label lang" data-vi="Giá Thấp Nhất (Bottom)" data-en="Lowest Price (Bottom)">Giá Thấp Nhất (Bottom)</div>
+        </div>
+    </div>
+
+    <!-- MÔ PHỎNG ĐỘNG HỌC -->
     <h2 class="lang" data-vi="I. Mô Phỏng Động Học" data-en="I. Dynamic Simulation">I. Mô Phỏng Động Học</h2>
     <div class="media-wrapper">
         <video controls>
@@ -236,50 +166,51 @@
         <div class="caption lang" data-vi="Biến động giá theo từng phiên giao dịch" data-en="Price fluctuation per trading session">Biến động giá theo từng phiên giao dịch</div>
     </div>
 
-    <!-- PHẦN 2: THỐNG KÊ -->
+    <!-- PHÂN TÍCH THỐNG KÊ -->
     <h2 class="lang" data-vi="II. Phân Tích Thống Kê" data-en="II. Statistical Analysis">II. Phân Tích Thống Kê</h2>
+    
+    <!-- VÍ DỤ NHÚNG BẢN ĐỒ TƯƠNG TÁC (Tạm thời tui vẫn để thẻ img cho bà đỡ lỗi, nhưng tui tạo sẵn thẻ iframe bị ẩn để bà biết chỗ xài) -->
     <div class="media-wrapper">
+        <!-- Nếu có file Plotly HTML, xóa thẻ <img> đi và dùng dòng <iframe> bên dưới: -->
+        <!-- <iframe src="cau1_bieudocot.html" height="500px"></iframe> -->
+        
         <img src="cau1_bieudocot.png" alt="Biểu đồ cột">
         <div class="caption lang" data-vi="Mặt bằng giá trung bình theo tháng" data-en="Average price level by month">Mặt bằng giá trung bình theo tháng</div>
     </div>
     
     <div class="media-wrapper">
+        <!-- Nếu có file Plotly HTML: -->
+        <!-- <iframe src="cau1_boxplot.html" height="500px"></iframe> -->
+        
         <img src="cau1_boxplot.png" alt="Biểu đồ hộp">
         <div class="caption lang" data-vi="Phân bố biên độ dao động (Boxplot)" data-en="Volatility distribution (Boxplot)">Phân bố biên độ dao động (Boxplot)</div>
     </div>
 
-    <!-- PHẦN 3: HISTOGRAM -->
+    <!-- TỔ CHỨC ĐỒ -->
     <h2 class="lang" data-vi="III. Tổ Chức Đồ" data-en="III. Histogram">III. Tổ Chức Đồ</h2>
     <div class="media-wrapper">
+        <!-- Nếu có file Plotly HTML: -->
+        <!-- <iframe src="histogram_quy_sv05.html" height="500px"></iframe> -->
+        
         <img src="histogram_quy_sv05.png" alt="Histogram">
         <div class="caption lang" data-vi="So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm" data-en="Price shift comparison: First vs Second half of the year">So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm</div>
     </div>
-
 </div>
 
-<!-- SCRIPT XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ & NGÔN NGỮ -->
 <script>
-    // 1. Chức năng đổi Giao diện Sáng/Tối & Chuyển Video
+    // XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ & NGÔN NGỮ
     const themeToggle = document.getElementById('themeToggle');
     const heroVideo = document.getElementById('heroVideo');
 
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
-        
         themeToggle.innerText = isDark ? 'LIGHT' : 'DARK';
-
-        if (isDark) {
-            heroVideo.src = '2.mp4'; // Sang giao diện tối thì bật video nền tối
-        } else {
-            heroVideo.src = '3.mp4'; // Sang giao diện sáng thì bật video nền sáng
-        }
-        
+        heroVideo.src = isDark ? '2.mp4' : '3.mp4'; 
         heroVideo.load();
         heroVideo.play();
     });
 
-    // 2. Chức năng đổi Ngôn ngữ (Việt - Anh)
     let isEnglish = false;
     const langToggle = document.getElementById('langToggle');
     const langElements = document.querySelectorAll('.lang');
