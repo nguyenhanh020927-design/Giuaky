@@ -169,6 +169,8 @@
         /* Responsive cho điện thoại */
         @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr; } }
     </style>
+<!-- Thư viện Chart.js cho biểu đồ tương tác -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -221,6 +223,14 @@
         </div>
 
         <!-- LƯỚI ĐA CHIỀU (GRID) CHỨA BIỂU ĐỒ & VIDEO -->
+<!-- TÍNH NĂNG ĐIỂM CỘNG: BIỂU ĐỒ TƯƠNG TÁC TOÀN CẢNH -->
+        <div class="glass-panel" style="margin-bottom: 30px;">
+            <div class="panel-header lang" data-vi="Biểu Đồ Diễn Biến Giá Tương Tác (Chart.js)" data-en="Interactive Price Action Chart (Chart.js)">Biểu Đồ Diễn Biến Giá Tương Tác (Chart.js)</div>
+            <div class="img-container" style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px;">
+                <canvas id="luxuryChart" height="100"></canvas>
+            </div>
+            <div class="caption lang" data-vi="Rê chuột vào biểu đồ để rà soát chi tiết giá đóng cửa từng phiên (365 ngày)" data-en="Hover chart to see closing price details for each session (365 days)">Rê chuột vào biểu đồ để rà soát chi tiết giá đóng cửa từng phiên (365 ngày)</div>
+        </div>
         <div class="charts-grid">
             
             <!-- Ô SỐ 1: VIDEO MÔ PHỎNG -->
@@ -303,6 +313,60 @@
             langElements.forEach(el => {
                 el.innerHTML = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-vi');
             });
+        });
+    </script>
+<!-- SCRIPT CHẠY BIỂU ĐỒ TƯƠNG TÁC -->
+    <script>
+        // BÀ PASTE DÃY 365 SỐ TỪ PYTHON VÀO ĐÂY NHÉ
+        const priceData = [124.5, 125.1, 123.8, 126.0, 128.5, 127.2, 130.1, 132.8, 129.5, 125.4, 121.1, 122.5, 124.0, 128.8, 130.2]; 
+
+        const labels = priceData.map((_, index) => `Phiên ${index + 1}`);
+        const ctxChart = document.getElementById('luxuryChart').getContext('2d');
+        
+        let gradient = ctxChart.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(184, 151, 74, 0.5)'); 
+        gradient.addColorStop(1, 'rgba(184, 151, 74, 0.0)'); 
+
+        new Chart(ctxChart, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Giá Đóng Cửa',
+                    data: priceData,
+                    borderColor: '#b8974a', 
+                    borderWidth: 2,
+                    backgroundColor: gradient, 
+                    fill: true,
+                    pointRadius: 0, 
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#b8974a',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleFont: { family: 'Cormorant Garamond', size: 16 },
+                        bodyFont: { family: 'Montserrat', size: 14 },
+                        padding: 15,
+                        borderColor: '#b8974a',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) { return '💰 ' + context.parsed.y + ' VNĐ'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#888', maxTicksLimit: 15 } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } }
+                }
+            }
         });
     </script>
 </body>
