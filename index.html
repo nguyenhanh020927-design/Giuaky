@@ -26,26 +26,28 @@
     <style>
         /* === MÀU SẮC CHUẨN ĐEN/TRẮNG THEO YÊU CẦU === */
         :root {
-            --bg-body: #f4f5f7;       /* Nền trang sáng (xám cực nhạt để hộp trắng nổi lên) */
-            --bg-card: #ffffff;       /* Nền hộp Trắng tinh */
-            --text-main: #000000;     /* Chữ Đen tuyền */
+            --bg-body: #ffffff;       /* Nền trang Trắng Tinh tuyệt đối */
+            --bg-card: #ffffff;       /* Nền hộp Trắng */
+            --text-main: #000000;     /* Chữ Đen tuyền tuyệt đối */
             --text-muted: #555555;    /* Chữ phụ xám đậm */
             --border-color: #dddddd;  /* Viền xám nhạt */
             --accent: #b8974a;        /* Màu Vàng Kim chủ đạo */
             --up-color: #1b5e20;      /* Xanh lá đậm */
             --down-color: #b71c1c;    /* Đỏ cờ đậm */
-            --shadow: rgba(0, 0, 0, 0.08); /* Bóng đổ cho giao diện sáng */
+            --shadow: rgba(0, 0, 0, 0.05); /* Bóng đổ mờ cho nền trắng */
+            --video-overlay: rgba(255, 255, 255, 0.6); /* Phủ trắng mờ lên video để chữ đen nổi lên */
         }
 
         body.dark-mode {
             --bg-body: #0a0a0a;       /* Nền trang Đen tuyền */
             --bg-card: #141414;       /* Nền hộp Đen nhám */
-            --text-main: #ffffff;     /* Chữ Trắng tinh */
+            --text-main: #ffffff;     /* Chữ Trắng Tinh tuyệt đối */
             --text-muted: #aaaaaa;    /* Chữ phụ xám sáng */
             --border-color: #333333;  /* Viền xám tối */
-            --up-color: #4caf50;      /* Xanh lá sáng (nổi trên nền đen) */
+            --up-color: #4caf50;      /* Xanh lá sáng */
             --down-color: #f44336;    /* Đỏ cờ sáng */
             --shadow: rgba(255, 255, 255, 0.03); /* Bóng đổ cho giao diện tối */
+            --video-overlay: rgba(0, 0, 0, 0.6); /* Phủ đen mờ lên video để chữ trắng nổi lên */
         }
 
         body { 
@@ -53,7 +55,7 @@
             background-color: var(--bg-body); 
             color: var(--text-main); 
             margin: 0; padding: 0; 
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.4s ease, color 0.4s ease;
             overflow-x: hidden; 
         }
 
@@ -80,15 +82,15 @@
         .hero-video {
             position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
             transform: translate(-50%, -50%); z-index: 0; object-fit: cover;
-            opacity: 0.8; /* Video hơi mờ nhẹ để nhường chỗ cho text */
         }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); z-index: 1; /* Cố định lớp phủ đen trên video để chữ trắng luôn nổi */
+            background: var(--video-overlay); z-index: 1; /* Lớp phủ tự đổi màu Sáng/Tối */
+            transition: background 0.4s ease;
         }
-        .hero-content { position: relative; z-index: 2; text-align: center; color: #ffffff; } /* Text trên banner luôn là Trắng */
-        .hero-content h1 { font-family: 'Cormorant Garamond', serif; font-size: 68px; margin: 0 0 15px 0; font-weight: 500; letter-spacing: 2px; }
-        .hero-content p { font-size: 14px; font-weight: 500; letter-spacing: 5px; text-transform: uppercase; margin: 0; opacity: 0.9; }
+        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--text-main); } /* Chữ lật Đen/Trắng theo theme */
+        .hero-content h1 { font-family: 'Cormorant Garamond', serif; font-size: 68px; margin: 0 0 15px 0; font-weight: 600; letter-spacing: 2px; }
+        .hero-content p { font-size: 14px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; margin: 0; opacity: 0.9; }
 
         .container { max-width: 1300px; margin: 0 auto; padding: 80px 20px; }
 
@@ -115,7 +117,7 @@
             cursor: default;
         }
         .kpi-item:hover { 
-            transform: translateY(-10px); /* Nổi lên mạnh hơn khi hover */
+            transform: translateY(-10px); 
             box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
             border-color: var(--accent);
         }
@@ -123,7 +125,6 @@
         .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 15px; }
         .kpi-val { font-family: 'Montserrat', sans-serif; font-size: 38px; font-weight: 700; margin-bottom: 12px; }
         
-        /* Chỉnh sửa dòng chú thích cho cân đối và nổi bật */
         .kpi-sub-row { display: flex; justify-content: center; align-items: center; gap: 8px; }
         .kpi-sub-text { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .kpi-sub-highlight { font-size: 12px; font-weight: 700; background: rgba(184, 151, 74, 0.1); color: var(--accent); padding: 3px 8px; border-radius: 4px; }
@@ -144,18 +145,14 @@
         .media-wrapper { text-align: center; margin-bottom: 60px; }
         .media-wrapper video { width: 100%; max-width: 950px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 5px 20px var(--shadow); }
         
-        /* Grid 2 ảnh cho Phần II */
         .image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 70px; }
         .image-box { text-align: center; }
         
-        /* Định dạng ảnh có thể click phóng to */
         .zoomable { width: 100%; height: auto; cursor: zoom-in; border-radius: 8px; border: 1px solid var(--border-color); transition: transform 0.3s, box-shadow 0.3s; background: #fff;}
-        .zoomable:hover { transform: scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .zoomable:hover { transform: scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
         
-        /* Ảnh đơn cho Phần III */
         .single-image .zoomable { max-width: 800px; }
 
-        /* CĂN GIỮA CHÚ THÍCH ẢNH */
         .caption { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 15px; text-align: center; }
 
         /* === MODAL PHÓNG TO ẢNH ĐEN MỜ === */
@@ -172,14 +169,15 @@
         .close { position: absolute; top: 25px; right: 45px; color: #f1f1f1; font-size: 45px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
         .close:hover { color: var(--accent); }
 
-        /* === FOOTER LIÊN HỆ === */
+        /* === FOOTER ĐỒNG BỘ THEO THEME === */
         footer {
-            background: #111111; color: #ffffff; text-align: center;
+            background: var(--bg-card); color: var(--text-main); text-align: center;
             padding: 60px 20px; border-top: 4px solid var(--accent); margin-top: 50px;
+            box-shadow: 0 -5px 20px var(--shadow);
         }
         footer h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin: 0 0 20px 0; color: var(--accent); letter-spacing: 1px; }
-        footer p { font-size: 13px; font-weight: 400; letter-spacing: 1.5px; opacity: 0.8; margin: 8px 0; line-height: 1.8; }
-        footer strong { font-weight: 600; color: #ffffff; }
+        footer p { font-size: 13px; font-weight: 500; letter-spacing: 1.5px; opacity: 0.8; margin: 8px 0; line-height: 1.8; }
+        footer strong { font-weight: 700; color: var(--text-main); }
     </style>
 </head>
 
@@ -308,7 +306,7 @@
 </div>
 
 <script>
-    // 1. XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ SÁNG/TỐI (ĐỔI CHỮ ĐEN/TRẮNG)
+    // 1. XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ SÁNG/TỐI
     const themeToggle = document.getElementById('themeToggle');
     const heroVideo = document.getElementById('heroVideo');
 
@@ -321,8 +319,8 @@
         heroVideo.src = isDark ? '2.mp4' : '3.mp4'; 
         heroVideo.load(); heroVideo.play();
         
-        // Buộc Chart.js thay đổi màu chữ các trục (Đen sang Trắng và ngược lại)
-        Chart.defaults.color = isDark ? '#aaaaaa' : '#555555';
+        // Cập nhật màu chữ Chart.js cho tương phản
+        Chart.defaults.color = isDark ? '#ffffff' : '#000000';
         if (Chart.instances.length > 0) {
             Chart.instances[0].update();
         }
@@ -350,12 +348,10 @@
             imgModal.src = this.src;
         }
     });
-    // Đóng ảnh khi bấm X
     closeModal.onclick = function() { modal.style.display = "none"; }
-    // Đóng ảnh khi click ra ngoài vùng ảnh
     modal.onclick = function(e) { if(e.target !== imgModal) modal.style.display = "none"; }
 
-    // 4. CHART.JS (ĐỌC FILE TSV VÀ HIỂN THỊ TRỤC RÕ RÀNG)
+    // 4. CHART.JS (ĐỌC FILE TSV VÀ HIỂN THỊ)
     async function loadDataAndDrawChart() {
         try {
             const response = await fetch('sv05.tsv');
@@ -375,12 +371,12 @@
 
             const ctxChart = document.getElementById('luxuryChart').getContext('2d');
             
-            // Thiết lập font mặc định cho Chart.js
+            // Thiết lập màu sắc Chart.js ban đầu (Đen trong suốt ở Light Mode)
             Chart.defaults.font.family = 'Montserrat'; 
-            Chart.defaults.color = '#555555'; // Mặc định ở Light mode là chữ xám đậm
+            Chart.defaults.color = '#000000'; 
 
             let grad = ctxChart.createLinearGradient(0, 0, 0, 400);
-            grad.addColorStop(0, 'rgba(184, 151, 74, 0.3)'); 
+            grad.addColorStop(0, 'rgba(184, 151, 74, 0.4)'); 
             grad.addColorStop(1, 'rgba(184, 151, 74, 0.0)'); 
 
             new Chart(ctxChart, {
@@ -407,20 +403,18 @@
                     plugins: { 
                         legend: { position: 'top', labels: { font: { weight: 'bold' } } },
                         tooltip: { 
-                            backgroundColor: 'rgba(0,0,0,0.85)', titleFont: { size: 14 }, bodyFont: { size: 13 }, padding: 12,
+                            backgroundColor: 'rgba(0,0,0,0.85)', titleFont: { size: 14, color: '#fff' }, bodyFont: { size: 13, color: '#fff' }, padding: 12,
                             callbacks: { label: function(context) { return ' ' + context.dataset.label + ': ' + context.parsed.y + ' VNĐ'; } }
                         } 
                     },
                     scales: {
                         x: { 
-                            // TÊN TRỤC NGANG (X)
                             title: { display: true, text: 'Thời Gian (Phiên Giao Dịch)', font: { size: 13, weight: 'bold' } },
                             grid: { display: false }, ticks: { maxTicksLimit: 15 } 
                         },
                         y: { 
-                            // TÊN TRỤC DỌC (Y)
                             title: { display: true, text: 'Mức Giá (VNĐ)', font: { size: 13, weight: 'bold' } },
-                            grid: { borderDash: [3, 3] }
+                            grid: { color: 'rgba(136,136,136,0.3)', borderDash: [3, 3] }
                         }
                     }
                 }
@@ -430,7 +424,6 @@
         }
     }
     
-    // Kích hoạt vẽ biểu đồ
     loadDataAndDrawChart();
 </script>
 </body>
