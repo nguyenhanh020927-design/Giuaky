@@ -35,7 +35,7 @@
             --up-color: #1b5e20;      /* Xanh lá đậm */
             --down-color: #b71c1c;    /* Đỏ cờ đậm */
             --shadow: rgba(0, 0, 0, 0.05); /* Bóng đổ mờ cho nền trắng */
-            --video-overlay: rgba(255, 255, 255, 0.6); /* Phủ trắng mờ lên video để chữ đen nổi lên */
+            --video-overlay: rgba(0, 0, 0 , 0.6); /* Phủ trắng mờ lên video để chữ đen nổi lên */
         }
 
         body.dark-mode {
@@ -88,9 +88,30 @@
             background: var(--video-overlay); z-index: 1; /* Lớp phủ tự đổi màu Sáng/Tối */
             transition: background 0.4s ease;
         }
-        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--text-main); } /* Chữ lật Đen/Trắng theo theme */
-        .hero-content h1 { font-family: 'Cormorant Garamond', serif; font-size: 68px; margin: 0 0 15px 0; font-weight: 600; letter-spacing: 2px; }
-        .hero-content p { font-size: 14px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; margin: 0; opacity: 0.9; }
+    /* SỬA DÒNG NÀY: Color đổi thành biến linh hoạt Đen/Trắng */
+        .hero-content { 
+            position: relative; 
+            z-index: 2; 
+            text-align: center; 
+            color: var(--text-main); /* Tự động: Đen ở Light mode, Trắng ở Dark Mode */
+        } 
+        
+        .hero-content h1 { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 68px; 
+            margin: 0 0 15px 0; 
+            font-weight: 500; 
+            letter-spacing: 2px; 
+        }
+        
+        .hero-content p { 
+            font-size: 14px; 
+            font-weight: 600; 
+            letter-spacing: 5px; 
+            text-transform: uppercase; 
+            margin: 0; 
+            opacity: 0.9; 
+        }
 
         .container { max-width: 1300px; margin: 0 auto; padding: 80px 20px; }
 
