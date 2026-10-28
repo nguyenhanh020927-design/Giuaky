@@ -5,224 +5,305 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
     
+    <!-- Font chữ Luxury -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
+    <!-- MÃ KHÓA BẢO MẬT -->
+    <script>
+        var password = "py25ckdl"; 
+        var input = prompt("Vui lòng nhập mật khẩu để truy cập báo cáo (Mật khẩu: py25ckdl):");
+        if (input !== password) {
+            alert("Sai mật khẩu! Bạn không có quyền truy cập trang web này.");
+            window.location.href = "https://www.google.com"; 
+        }
+    </script>
+
     <style>
+        /* BIẾN MÀU SẮC LINH HOẠT - GLASSMORPHISM */
         :root {
-            --bg-color: #ffffff; 
-            --text-color: #000000; 
-            --border-color: #e0e0e0; 
-            --card-bg: #f9f9f9;
-            --accent: #2c3e50;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-main: #111111;
+            --text-muted: #555555;
+            --accent: #b8974a; /* Vàng kim tối giản */
+            --overlay: rgba(255, 255, 255, 0.3);
         }
 
         body.dark-mode {
-            --bg-color: #000000; 
-            --text-color: #ffffff; 
-            --border-color: #333333;
-            --card-bg: #111111;
-            --accent: #d4af37;
+            --glass-bg: rgba(10, 10, 10, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --overlay: rgba(0, 0, 0, 0.5);
         }
 
+        * { box-sizing: border-box; }
+        
         body { 
             font-family: 'Montserrat', sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
             margin: 0; padding: 0; 
-            transition: 0.3s ease;
-            overflow-x: hidden; 
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: color 0.4s ease;
         }
 
-        /* --- CÁC HIỆU ỨNG CŨ (Nút bấm, Banner, Typography) GIỮ NGUYÊN --- */
-        .controls { position: fixed; top: 20px; right: 30px; display: flex; gap: 20px; z-index: 1000; mix-blend-mode: difference; }
-        button { background: transparent; color: #fff; border: none; font-family: 'Montserrat'; font-size: 12px; letter-spacing: 2px; cursor: pointer; padding-bottom: 3px; border-bottom: 1px solid transparent; transition: 0.3s; }
-        button:hover { border-bottom: 1px solid #fff; }
-        .hero-section { position: relative; width: 100%; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hero-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.1); z-index: 1; }
-        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--text-color); }
-        .hero-content h1 { font-family: 'Cormorant Garamond', serif; font-size: 50px; letter-spacing: 2px; margin: 0 0 10px 0; }
-        .hero-content p { font-size: 18px; letter-spacing: 3px; text-transform: uppercase; margin: 0; white-space: nowrap; }
-
-        /* ================= TÍNH NĂNG MỚI: STOCK TICKER TAPE ================= */
-        .ticker-wrap {
-            width: 100%;
-            background-color: var(--text-color);
-            color: var(--bg-color);
-            padding: 10px 0;
-            overflow: hidden;
-            white-space: nowrap;
-            box-sizing: border-box;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
+        /* --- VIDEO NỀN FULL MÀN HÌNH (LỚP DƯỚI CÙNG) --- */
+        #bgVideo {
+            position: fixed;
+            top: 50%; left: 50%;
+            min-width: 100vw; min-height: 100vh;
+            width: auto; height: auto;
+            transform: translate(-50%, -50%);
+            z-index: -2;
+            object-fit: cover;
         }
-        .ticker { display: inline-block; animation: ticker 25s linear infinite; }
-        .ticker-item { padding: 0 30px; display: inline-block; }
-        .up { color: #00ff00; } /* Màu xanh tăng giá */
-        .down { color: #ff4444; } /* Màu đỏ giảm giá */
-        body:not(.dark-mode) .up { color: #008800; } 
-        body:not(.dark-mode) .down { color: #cc0000; }
-        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
-
-        /* ================= TÍNH NĂNG MỚI: KPI CARDS ================= */
-        .kpi-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin: 40px 0 60px 0;
-        }
-        .kpi-card {
-            flex: 1;
-            background: var(--card-bg);
-            padding: 30px 20px;
-            text-align: center;
-            border: 1px solid var(--border-color);
+        
+        #videoOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: var(--overlay);
+            backdrop-filter: blur(8px); /* Làm mờ video để tôn dữ liệu lên */
+            z-index: -1;
             transition: 0.4s ease;
-            cursor: crosshair;
         }
-        .kpi-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--text-color); }
-        body.dark-mode .kpi-card:hover { box-shadow: 0 15px 30px rgba(255,255,255,0.05); }
-        .kpi-value { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 600; margin-bottom: 5px; }
-        .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
 
-        /* --- CONTAINER VÀ MEDIA GIỮ NGUYÊN --- */
-        .container { max-width: 900px; margin: 50px auto; padding: 0 20px; }
-        h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; text-align: center; margin-top: 80px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 1px; }
-        .info-header { text-align: center; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 50px; border-bottom: 1px solid var(--border-color); padding-bottom: 40px; }
-        .media-wrapper { width: 100%; margin: 40px 0; text-align: center; }
-        video, img, iframe { width: 100%; max-width: 850px; border: 1px solid var(--border-color); border-radius: 0; }
-        .caption { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; opacity: 0.6; text-align: center; }
+        /* --- NÚT BẤM GÓC PHẢI --- */
+        .controls { position: fixed; top: 25px; right: 40px; display: flex; gap: 20px; z-index: 1000; }
+        button { 
+            background: transparent; color: var(--text-main); border: none; 
+            font-family: 'Montserrat'; font-size: 11px; letter-spacing: 2px; 
+            cursor: pointer; padding-bottom: 3px; border-bottom: 1px solid transparent; 
+            transition: 0.3s; font-weight: 500;
+        }
+        button:hover { border-bottom: 1px solid var(--text-main); }
+
+        /* --- BỐ CỤC DASHBOARD CHÍNH --- */
+        .dashboard {
+            max-width: 1400px; /* Rộng hơn để chứa đa chiều dữ liệu */
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+
+        /* TÊN BÁO CÁO & THÔNG TIN SINH VIÊN */
+        .header-section { text-align: left; margin-bottom: 40px; padding-top: 20px;}
+        .header-section h1 { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 400; margin: 0 0 10px 0; letter-spacing: 1px;}
+        .student-info { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+
+        /* DÀN KPI CARDS CỰC CHẤT */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .kpi-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 25px 20px;
+            text-align: left;
+            backdrop-filter: blur(20px); /* Hiệu ứng kính */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .kpi-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .kpi-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 10px;}
+        .kpi-val { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; margin-bottom: 5px; }
+        .kpi-sub { font-size: 11px; opacity: 0.8; }
+        
+        .up { color: #2e7d32; } body.dark-mode .up { color: #4caf50; }
+        .down { color: #c62828; } body.dark-mode .down { color: #ef5350; }
+
+        /* KHU VỰC ĐA CHIỀU (GRID 2 CỘT) */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        /* Tấm kính chứa biểu đồ */
+        .glass-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .panel-header { font-family: 'Cormorant Garamond', serif; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; text-align: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;}
+        
+        /* CÔNG NGHỆ HOVER ẢNH BÁ ĐẠO */
+        .img-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+        .img-container img, .img-container video {
+            width: 100%;
+            display: block;
+            transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .img-container:hover img { transform: scale(1.05); } /* Zoom nhẹ khi rê chuột */
+        
+        /* Lớp phủ Insight hiển thị khi Hover */
+        .insight-overlay {
+            position: absolute;
+            bottom: -100%; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); color: #fff;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: bottom 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            padding: 20px; text-align: center;
+        }
+        .img-container:hover .insight-overlay { bottom: 0; } /* Kéo chuột vào là thông số trượt lên */
+        .insight-overlay h4 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--accent); margin: 0 0 10px 0; }
+        .insight-overlay p { font-size: 13px; line-height: 1.8; margin: 0; }
+
+        .caption { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; text-align: center; color: var(--text-muted); }
+
+        /* Responsive cho điện thoại */
+        @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
+
 <body>
+    <!-- VIDEO NỀN (Tự đổi tùy chế độ sáng/tối) -->
+    <video id="bgVideo" autoplay loop muted playsinline src="3.mp4"></video>
+    <div id="videoOverlay"></div>
 
-<div class="controls">
-    <button id="langToggle">ENG</button>
-    <button id="themeToggle">DARK</button>
-</div>
-
-<div class="hero-section">
-    <video id="heroVideo" class="hero-video" autoplay loop muted playsinline src="3.mp4"></video>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <h1 class="lang" data-vi="Báo Cáo Giữa Kỳ" data-en="Midterm Report">Báo Cáo Giữa Kỳ</h1>
-        <p class="lang" data-vi="Mô Phỏng Biến Động Giá Chứng Khoán" data-en="Stock Price Fluctuation Simulation">Mô Phỏng Biến Động Giá Chứng Khoán</p>
-    </div>
-</div>
-
-<!-- THANH CUỘN GIÁ CHỨNG KHOÁN (TICKER TAPE) -->
-<div class="ticker-wrap">
-    <div class="ticker">
-        <!-- Khối 1 -->
-        <div class="ticker-item">TICKER: ABC-5</div>
-        <div class="ticker-item">VOL: 1.2M</div>
-        <div class="ticker-item">OPEN: 124.50</div>
-        <div class="ticker-item up">HIGH: 132.80 ▲ +6.6%</div>
-        <div class="ticker-item down">LOW: 121.10 ▼ -2.7%</div>
-        <div class="ticker-item">CLOSE: 130.20</div>
-        <!-- Copy lại khối 1 để tạo vòng lặp vô tận mượt mà -->
-        <div class="ticker-item">TICKER: ABC-5</div>
-        <div class="ticker-item">VOL: 1.2M</div>
-        <div class="ticker-item">OPEN: 124.50</div>
-        <div class="ticker-item up">HIGH: 132.80 ▲ +6.6%</div>
-        <div class="ticker-item down">LOW: 121.10 ▼ -2.7%</div>
-        <div class="ticker-item">CLOSE: 130.20</div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="info-header">
-        <p class="lang" data-vi="Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005" data-en="Nguyen Thi Hanh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; ID: 3110525005">Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005</p>
-        <p class="lang" data-vi="Mã dữ liệu: abc-5" data-en="Data Code: abc-5">Mã dữ liệu: abc-5</p>
+    <div class="controls">
+        <button id="langToggle">ENG</button>
+        <button id="themeToggle">DARK</button>
     </div>
 
-    <!-- CÁC THẺ KPI HIGHLIGHT DỮ LIỆU -->
-    <div class="kpi-container">
-        <div class="kpi-card">
-            <div class="kpi-value">365</div>
-            <div class="kpi-label lang" data-vi="Ngày Giao Dịch" data-en="Trading Days">Ngày Giao Dịch</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-value up">▲ 132.8</div>
-            <div class="kpi-label lang" data-vi="Giá Cao Nhất (Peak)" data-en="Highest Price (Peak)">Giá Cao Nhất (Peak)</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-value down">▼ 89.4</div>
-            <div class="kpi-label lang" data-vi="Giá Thấp Nhất (Bottom)" data-en="Lowest Price (Bottom)">Giá Thấp Nhất (Bottom)</div>
-        </div>
-    </div>
-
-    <!-- MÔ PHỎNG ĐỘNG HỌC -->
-    <h2 class="lang" data-vi="I. Mô Phỏng Động Học" data-en="I. Dynamic Simulation">I. Mô Phỏng Động Học</h2>
-    <div class="media-wrapper">
-        <video controls>
-            <source src="abc10.mp4" type="video/mp4">
-        </video>
-        <div class="caption lang" data-vi="Biến động giá theo từng phiên giao dịch" data-en="Price fluctuation per trading session">Biến động giá theo từng phiên giao dịch</div>
-    </div>
-
-    <!-- PHÂN TÍCH THỐNG KÊ -->
-    <h2 class="lang" data-vi="II. Phân Tích Thống Kê" data-en="II. Statistical Analysis">II. Phân Tích Thống Kê</h2>
-    
-    <!-- VÍ DỤ NHÚNG BẢN ĐỒ TƯƠNG TÁC (Tạm thời tui vẫn để thẻ img cho bà đỡ lỗi, nhưng tui tạo sẵn thẻ iframe bị ẩn để bà biết chỗ xài) -->
-    <div class="media-wrapper">
-        <!-- Nếu có file Plotly HTML, xóa thẻ <img> đi và dùng dòng <iframe> bên dưới: -->
-        <!-- <iframe src="cau1_bieudocot.html" height="500px"></iframe> -->
+    <div class="dashboard">
         
-        <img src="cau1_bieudocot.png" alt="Biểu đồ cột">
-        <div class="caption lang" data-vi="Mặt bằng giá trung bình theo tháng" data-en="Average price level by month">Mặt bằng giá trung bình theo tháng</div>
+        <!-- HEADER CỰC NGHỆ THUẬT -->
+        <div class="header-section">
+            <h1 class="lang" data-vi="Phân Tích Mô Phỏng Giá Chứng Khoán" data-en="Stock Price Simulation Analysis">Phân Tích Mô Phỏng Giá Chứng Khoán</h1>
+            <div class="student-info lang" data-vi="Sinh viên: Nguyễn Thị Hạnh &nbsp;|&nbsp; 25CKDL &nbsp;|&nbsp; MS: 3110525005 &nbsp;|&nbsp; Mã DL: abc-5" data-en="Student: Nguyen Thi Hanh | 25CKDL | ID: 3110525005 | Data: abc-5">
+                Sinh viên: Nguyễn Thị Hạnh &nbsp;|&nbsp; 25CKDL &nbsp;|&nbsp; MS: 3110525005 &nbsp;|&nbsp; Mã DL: abc-5
+            </div>
+        </div>
+
+        <!-- 5 THẺ KPI TÓM TẮT ĐÁNH BẠI "PINK FINANCIAL PRO" -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title lang" data-vi="Giá Đỉnh Chu Kỳ (Cao Nhất)" data-en="Cycle Peak (Highest)">Giá Đỉnh Chu Kỳ (Cao Nhất)</div>
+                <div class="kpi-val up">132.80</div>
+                <div class="kpi-sub lang" data-vi="▲ Thiết lập tại Phiên 165" data-en="▲ Reached at Session 165">▲ Thiết lập tại Phiên 165</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title lang" data-vi="Giá Đáy Chu Kỳ (Thấp Nhất)" data-en="Cycle Bottom (Lowest)">Giá Đáy Chu Kỳ (Thấp Nhất)</div>
+                <div class="kpi-val down">89.40</div>
+                <div class="kpi-sub lang" data-vi="▼ Thiết lập tại Phiên 365" data-en="▼ Reached at Session 365">▼ Thiết lập tại Phiên 365</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title lang" data-vi="Giá Đóng Cửa Trung Bình" data-en="Average Close Price">Giá Đóng Cửa Trung Bình</div>
+                <div class="kpi-val">115.60</div>
+                <div class="kpi-sub lang" data-vi="Trung bình trong 365 phiên" data-en="Average across 365 sessions">Trung bình trong 365 phiên</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title lang" data-vi="Mức Sụt Giảm (Max Drawdown)" data-en="Max Drawdown">Mức Sụt Giảm (Max Drawdown)</div>
+                <div class="kpi-val down">-32.6%</div>
+                <div class="kpi-sub lang" data-vi="Sụt giảm từ Đỉnh về Đáy" data-en="Drop from Peak to Bottom">Sụt giảm từ Đỉnh về Đáy</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title lang" data-vi="Quy Mô Dữ Liệu" data-en="Data Scale">Quy Mô Dữ Liệu</div>
+                <div class="kpi-val">365</div>
+                <div class="kpi-sub lang" data-vi="Phiên giao dịch (Mã abc-5)" data-en="Trading sessions (abc-5)">Phiên giao dịch (Mã abc-5)</div>
+            </div>
+        </div>
+
+        <!-- LƯỚI ĐA CHIỀU (GRID) CHỨA BIỂU ĐỒ & VIDEO -->
+        <div class="charts-grid">
+            
+            <!-- Ô SỐ 1: VIDEO MÔ PHỎNG -->
+            <div class="glass-panel">
+                <div class="panel-header lang" data-vi="▶ Video Mô Phỏng Động Học" data-en="▶ Dynamic Simulation Video">▶ Video Mô Phỏng Động Học</div>
+                <div class="img-container">
+                    <video controls muted autoplay loop>
+                        <source src="abc10.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="caption lang" data-vi="Tái hiện diễn biến giá thực tế qua 365 phiên giao dịch" data-en="Real-time price action replay over 365 sessions">Tái hiện diễn biến giá thực tế qua 365 phiên giao dịch</div>
+            </div>
+
+            <!-- Ô SỐ 2: BIỂU ĐỒ CỘT VỚI HOVER INSIGHT -->
+            <div class="glass-panel">
+                <div class="panel-header lang" data-vi="Biểu Đồ Mặt Bằng Giá Tháng" data-en="Monthly Price Level Chart">Biểu Đồ Mặt Bằng Giá Tháng</div>
+                <div class="img-container">
+                    <img src="cau1_bieudocot.png" alt="Biểu đồ cột">
+                    <!-- Bảng trượt lên khi rê chuột -->
+                    <div class="insight-overlay">
+                        <h4 class="lang" data-vi="Insight Chuyên Sâu" data-en="Deep Insight">Insight Chuyên Sâu</h4>
+                        <p class="lang" data-vi="Tháng 7 ghi nhận mặt bằng giá cao nhất.<br>Xu hướng chốt lời mạnh xuất hiện vào quý cuối năm." data-en="July recorded the highest price level.<br>Strong profit-taking trend appeared in Q4.">Tháng 7 ghi nhận mặt bằng giá cao nhất.<br>Xu hướng chốt lời mạnh xuất hiện vào quý cuối năm.</p>
+                    </div>
+                </div>
+                <div class="caption lang" data-vi="Rê chuột vào ảnh để xem Insight phân tích" data-en="Hover image for analytical insight">Rê chuột vào ảnh để xem Insight phân tích</div>
+            </div>
+
+            <!-- Ô SỐ 3: BOXPLOT VỚI HOVER INSIGHT -->
+            <div class="glass-panel">
+                <div class="panel-header lang" data-vi="Phân Bố Biên Độ Dao Động (Boxplot)" data-en="Volatility Distribution (Boxplot)">Phân Bố Biên Độ Dao Động (Boxplot)</div>
+                <div class="img-container">
+                    <img src="cau1_boxplot.png" alt="Biểu đồ hộp">
+                    <div class="insight-overlay">
+                        <h4 class="lang" data-vi="Nhận Diện Biến Động" data-en="Volatility Detection">Nhận Diện Biến Động</h4>
+                        <p class="lang" data-vi="Biên độ râu nến dài cho thấy sự giằng co phe Mua/Bán.<br>Các điểm Outlier cảnh báo phiên đột biến thanh khoản." data-en="Long wicks indicate strong Buy/Sell struggle.<br>Outliers warn of liquidity breakout sessions.">Biên độ râu nến dài cho thấy sự giằng co phe Mua/Bán.<br>Các điểm Outlier cảnh báo phiên đột biến thanh khoản.</p>
+                    </div>
+                </div>
+                <div class="caption lang" data-vi="Khoảng tứ phân vị và các điểm dị biệt (Outliers)" data-en="Interquartile range and Outliers">Khoảng tứ phân vị và các điểm dị biệt (Outliers)</div>
+            </div>
+
+            <!-- Ô SỐ 4: HISTOGRAM VỚI HOVER INSIGHT -->
+            <div class="glass-panel">
+                <div class="panel-header lang" data-vi="Tổ Chức Đồ So Sánh Nửa Năm" data-en="Half-year Comparison Histogram">Tổ Chức Đồ So Sánh Nửa Năm</div>
+                <div class="img-container">
+                    <img src="histogram_quy_sv05.png" alt="Histogram">
+                    <div class="insight-overlay">
+                        <h4 class="lang" data-vi="Dịch Chuyển Trọng Tâm Giá" data-en="Price Gravity Shift">Dịch Chuyển Trọng Tâm Giá</h4>
+                        <p class="lang" data-vi="Phân phối chuẩn bị lệch trái trong nửa cuối năm.<br>Khối lượng kẹp hàng vùng đỉnh khá lớn." data-en="Normal distribution skewed left in H2.<br>Heavy volume trapped at the peak.">Phân phối chuẩn bị lệch trái trong nửa cuối năm.<br>Khối lượng kẹp hàng vùng đỉnh khá lớn.</p>
+                    </div>
+                </div>
+                <div class="caption lang" data-vi="Đánh giá xác suất và mật độ tập trung giá trị" data-en="Probability and value density assessment">Đánh giá xác suất và mật độ tập trung giá trị</div>
+            </div>
+
+        </div>
     </div>
-    
-    <div class="media-wrapper">
-        <!-- Nếu có file Plotly HTML: -->
-        <!-- <iframe src="cau1_boxplot.html" height="500px"></iframe> -->
-        
-        <img src="cau1_boxplot.png" alt="Biểu đồ hộp">
-        <div class="caption lang" data-vi="Phân bố biên độ dao động (Boxplot)" data-en="Volatility distribution (Boxplot)">Phân bố biên độ dao động (Boxplot)</div>
-    </div>
 
-    <!-- TỔ CHỨC ĐỒ -->
-    <h2 class="lang" data-vi="III. Tổ Chức Đồ" data-en="III. Histogram">III. Tổ Chức Đồ</h2>
-    <div class="media-wrapper">
-        <!-- Nếu có file Plotly HTML: -->
-        <!-- <iframe src="histogram_quy_sv05.html" height="500px"></iframe> -->
-        
-        <img src="histogram_quy_sv05.png" alt="Histogram">
-        <div class="caption lang" data-vi="So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm" data-en="Price shift comparison: First vs Second half of the year">So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm</div>
-    </div>
-</div>
+    <script>
+        // CHUYỂN ĐỔI CHẾ ĐỘ SÁNG TỐI (Tương tác với Video Nền & Màu Glass)
+        const themeToggle = document.getElementById('themeToggle');
+        const bgVideo = document.getElementById('bgVideo');
 
-<script>
-    // XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ & NGÔN NGỮ
-    const themeToggle = document.getElementById('themeToggle');
-    const heroVideo = document.getElementById('heroVideo');
-
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        themeToggle.innerText = isDark ? 'LIGHT' : 'DARK';
-        heroVideo.src = isDark ? '2.mp4' : '3.mp4'; 
-        heroVideo.load();
-        heroVideo.play();
-    });
-
-    let isEnglish = false;
-    const langToggle = document.getElementById('langToggle');
-    const langElements = document.querySelectorAll('.lang');
-
-    langToggle.addEventListener('click', () => {
-        isEnglish = !isEnglish;
-        langToggle.innerText = isEnglish ? 'VIE' : 'ENG';
-        langElements.forEach(el => {
-            el.innerText = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-vi');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeToggle.innerText = isDark ? 'LIGHT' : 'DARK';
+            
+            // Đổi background video mượt mà
+            bgVideo.src = isDark ? '2.mp4' : '3.mp4'; 
+            bgVideo.load(); bgVideo.play();
         });
-    });
-</script>
 
+        // CHUYỂN ĐỔI NGÔN NGỮ ĐA CHIỀU
+        let isEnglish = false;
+        const langToggle = document.getElementById('langToggle');
+        const langElements = document.querySelectorAll('.lang');
+
+        langToggle.addEventListener('click', () => {
+            isEnglish = !isEnglish;
+            langToggle.innerText = isEnglish ? 'VIE' : 'ENG';
+            langElements.forEach(el => {
+                el.innerHTML = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-vi');
+            });
+        });
+    </script>
 </body>
 </html>
