@@ -3,156 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phân Tích Biến Động Cổ Phiếu</title>
-    <!-- Tải thư viện Plotly.js cho biểu đồ khoa học tương tác -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
     <style>
-        /* Phong cách Minimalism & Glassmorphism cao cấp */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #000; /* Dự phòng nếu video không tải được */
-            color: #111;
-            overflow: hidden; 
+        :root {
+            --bg-color: #ffffff; 
+            --text-color: #000000; 
+            --border-color: #e0e0e0; 
         }
 
-        /* Lớp Video Background tĩnh/động phía sau */
-        .video-background {
+        body.dark-mode {
+            --bg-color: #000000; 
+            --text-color: #ffffff; 
+            --border-color: #333333;
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            margin: 0; 
+            padding: 0; 
+            transition: 0.3s ease;
+            line-height: 1.8;
+            font-weight: 300;
+            overflow-x: hidden; 
+        }
+
+        .controls {
             position: fixed;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+            mix-blend-mode: difference; 
+        }
+
+        button {
+            background: transparent;
+            color: #ffffff;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 3px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            border-bottom: 1px solid #ffffff;
+        }
+
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 90vh; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            border: none;
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            opacity: 0.85; 
+            background: rgba(0, 0, 0, 0.1); 
+            z-index: 1;
         }
 
-        /* Bảng điều khiển hiệu ứng kính mờ sang trọng */
-        .glass-container {
+        .hero-content {
             position: relative;
-            width: 85%;
-            max-width: 1100px;
-            margin: 4% auto;
-            padding: 50px;
-            background: rgba(255, 255, 255, 0.75); /* Trắng bán trong suốt */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 4px; /* Bo góc cực nhẹ để giữ nét tinh tế */
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            height: 75vh;
-            overflow-y: auto;
-        }
-
-        header {
+            z-index: 2;
             text-align: center;
-            margin-bottom: 50px;
+            color: var(--text-color); /* Tự động đổi màu: Đen ở Light mode, Trắng ở Dark mode */
         }
 
-        h1 {
-            font-weight: 300;
-            font-size: 26px;
-            text-transform: uppercase;
+        .hero-content h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 50px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin: 0 0 10px 0;
+        }
+
+        .hero-content p {
+            font-size: 18px; /* Đã tăng cỡ chữ từ 14px lên 18px */
             letter-spacing: 3px;
-            margin-bottom: 10px;
+            text-transform: uppercase;
+            margin: 0;
+            opacity: 0.9; /* Tăng độ đậm lên một chút để chữ sắc nét hơn */
         }
 
-        p.subtitle {
-            font-size: 13px;
-            color: #666;
+        .container { 
+            max-width: 900px; 
+            margin: 80px auto; 
+            padding: 0 20px;
+        }
+
+        h2 { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 28px;
+            font-weight: 400;
+            text-align: center; 
+            margin-top: 60px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-header { 
+            text-align: center; 
+            font-size: 13px; 
+            text-transform: uppercase;
             letter-spacing: 1.5px;
+            margin-bottom: 80px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 40px;
         }
 
-        /* Vùng chứa biểu đồ */
-        #stockChart {
+        .media-wrapper {
             width: 100%;
-            height: 450px;
+            margin: 40px 0;
+            text-align: center;
         }
 
-        /* Tuỳ chỉnh thanh cuộn cho thanh lịch */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        video, img { 
+            width: 100%; 
+            max-width: 850px; 
+            border: 1px solid var(--border-color);
+            border-radius: 0; 
+        }
+
+        .caption {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            opacity: 0.6;
+            text-align: center;
+        }
     </style>
+    
+    <!-- MÃ KHÓA BẢO MẬT ĐÃ ĐƯỢC CHUYỂN VÀO TRONG HEAD CHO CHUẨN -->
+    <script>
+        var password = "py25ckdl"; 
+        var input = prompt("Vui lòng nhập mật khẩu để truy cập báo cáo (Mật khẩu: py25ckdl):");
+        
+        if (input !== password) {
+            alert("Sai mật khẩu! Bạn không có quyền truy cập trang web này.");
+            window.location.href = "https://www.google.com"; 
+        } else {
+            alert("Mật khẩu chính xác! Chào mừng đến với Báo cáo phân tích của Nguyễn Thị Hạnh.");
+        }
+    </script>
 </head>
+
 <body>
 
-    <!-- Thay đổi thuộc tính src thành link video nền hoặc ảnh nền dự án của bạn -->
-    <video autoplay muted loop playsinline class="video-background">
-        <source src="https://cdn.pixabay.com/video/2022/01/21/105047-668102607_tiny.mp4" type="video/mp4">
-    </video>
+<div class="controls">
+    <button id="langToggle">ENG</button>
+    <button id="themeToggle">DARK</button>
+</div>
 
-    <div class="glass-container">
-        <header>
-            <h1>Phân Tích Xu Hướng Thị Trường</h1>
-            <p class="subtitle">Dữ liệu tham chiếu: tập tin sv05.tsv | Cập nhật theo thời gian thực</p>
-        </header>
+<div class="hero-section">
+    <!-- Gán trực tiếp src vào thẻ video, xóa bỏ thẻ source bên trong -->
+    <video id="heroVideo" class="hero-video" autoplay loop muted playsinline src="3.mp4"></video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="lang" data-vi="Báo Cáo Giữa Kỳ" data-en="Midterm Report">Báo Cáo Giữa Kỳ</h1>
+        <p class="lang" data-vi="Mô Phỏng Biến Động Giá Chứng Khoán" data-en="Stock Price Fluctuation Simulation">Mô Phỏng Biến Động Giá Chứng Khoán</p>
+    </div>
+</div>
 
-        <!-- Biểu đồ sẽ được render tại đây -->
-        <div id="stockChart"></div>
+<div class="container">
+    <div class="info-header">
+        <p class="lang" 
+           data-vi="Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005" 
+           data-en="Nguyen Thi Hanh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; ID: 3110525005">
+           Nguyễn Thị Hạnh &nbsp;&nbsp;|&nbsp;&nbsp; 25CKDL &nbsp;&nbsp;|&nbsp;&nbsp; MSSV: 3110525005
+        </p>
+        <p class="lang" 
+           data-vi="Mã dữ liệu: abc-5" 
+           data-en="Data Code: abc-5">
+           Mã dữ liệu: abc-5
+        </p>
     </div>
 
-    <script>
-        // Dữ liệu mô phỏng. Khi triển khai thật, bạn có thể dùng d3.tsv() hoặc d3.csv() 
-        // để đọc trực tiếp file sv05.tsv và bóc tách dữ liệu mảng x, y.
-        var trace_close_price = {
-            x: ['2026-09-01', '2026-09-05', '2026-09-10', '2026-09-15', '2026-09-20', '2026-09-25', '2026-10-01', '2026-10-05', '2026-10-10', '2026-10-15'],
-            y: [102.5, 104.2, 101.8, 108.5, 110.1, 109.4, 115.0, 113.2, 118.6, 121.3],
-            type: 'scatter',
-            mode: 'lines',
-            line: {
-                color: '#222', // Đường nét màu xám đen quyền lực, không dùng màu chói
-                width: 1.5,
-                shape: 'spline' // Làm mượt các góc gấp khúc
-            },
-            fill: 'tozeroy', // Phủ gradient nhạt dưới đường xu hướng
-            fillcolor: 'rgba(0,0,0,0.03)',
-            name: 'Giá Đóng Cửa',
-            hoverinfo: 'x+y'
-        };
+    <h2 class="lang" data-vi="I. Mô Phỏng Động Học" data-en="I. Dynamic Simulation">I. Mô Phỏng Động Học</h2>
+    <div class="media-wrapper">
+        <video controls>
+            <source src="abc10.mp4" type="video/mp4">
+        </video>
+        <div class="caption lang" data-vi="Biến động giá theo từng phiên giao dịch" data-en="Price fluctuation per trading session">Biến động giá theo từng phiên giao dịch</div>
+    </div>
 
-        var layout = {
-            paper_bgcolor: 'rgba(0,0,0,0)', // Nền trong suốt để lộ hiệu ứng kính mờ
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            margin: {t: 10, r: 20, l: 40, b: 40},
-            xaxis: {
-                showgrid: false, // Xoá lưới dọc rườm rà
-                zeroline: false,
-                showline: true,
-                linecolor: '#ccc',
-                tickfont: { family: 'Helvetica Neue', color: '#888' },
-                spikemode: 'across', // Kích hoạt đường gióng crosshair
-                spikesnap: 'cursor',
-                showspikes: true,
-                spikethickness: 1,
-                spikedash: 'solid',
-                spikecolor: '#555'
-            },
-            yaxis: {
-                showgrid: true,
-                gridcolor: 'rgba(0,0,0,0.04)', // Lưới ngang cực mờ
-                zeroline: false,
-                showline: false,
-                tickfont: { family: 'Helvetica Neue', color: '#888' }
-            },
-            hovermode: 'x unified', // Tooltip gom chung thông số cực kỳ sang trọng
-            hoverlabel: {
-                bgcolor: 'rgba(255,255,255,0.95)',
-                font: { family: 'Helvetica Neue', size: 13, color: '#111' },
-                bordercolor: 'rgba(0,0,0,0.1)'
-            }
-        };
+    <h2 class="lang" data-vi="II. Phân Tích Thống Kê" data-en="II. Statistical Analysis">II. Phân Tích Thống Kê</h2>
 
-        var config = {
-            displayModeBar: false, // Tắt toàn bộ các nút bấm zoom/pan mặc định để trang web sạch sẽ nhất
-            responsive: true
-        };
+<!-- Đổi src thành đúng tên file bà chụp: cau1_bieudocot.png -->
+    <div class="media-wrapper">
+        <img src="cau1_bieudocot.png" alt="Biểu đồ cột">
+        <div class="caption lang" data-vi="Mặt bằng giá trung bình theo tháng" data-en="Average price level by month">Mặt bằng giá trung bình theo tháng</div>
+    </div>
+<!-- Đổi src thành đúng tên file bà chụp: cau1_boxplot.png -->
+    <div class="media-wrapper">
+        <img src="cau1_boxplot.png" alt="Biểu đồ hộp">
+        <div class="caption lang" data-vi="Phân bố biên độ dao động (Boxplot)" data-en="Volatility distribution (Boxplot)">Phân bố biên độ dao động (Boxplot)</div>
+    </div>
+    <h2 class="lang" data-vi="III. Tổ Chức Đồ" data-en="III. Histogram">III. Tổ Chức Đồ</h2>
+<!-- CHÚ Ý CHỖ NÀY: Tên file mới của bà là 'histogram_quy_sv05.png' chứ không phải 'cau4_histogram.png' -->
+    <div class="media-wrapper">
+        <img src="histogram_quy_sv05.png" alt="Histogram">
+        <div class="caption lang" data-vi="So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm" data-en="Price shift comparison: First vs Second half of the year">So sánh dịch chuyển giá: Nửa đầu & nửa cuối năm</div>
+    </div>
 
-        // Khởi tạo biểu đồ
-        Plotly.newPlot('stockChart', [trace_close_price], layout, config);
-    </script>
+<script>
+    // 1. CHỨC NĂNG ĐỔI SÁNG/TỐI & VIDEO
+    const themeToggle = document.getElementById('themeToggle');
+    const heroVideo = document.getElementById('heroVideo');
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        
+        themeToggle.innerText = isDark ? 'LIGHT' : 'DARK';
+
+        // Gán trực tiếp src cho thẻ video
+        if (isDark) {
+            heroVideo.src = '2.mp4'; 
+        } else {
+            heroVideo.src = '3.mp4'; 
+        }
+        
+        heroVideo.load();
+        heroVideo.play();
+    });
+
+    // 2. CHỨC NĂNG ĐỔI NGÔN NGỮ (Tui đã thêm lại cho bà)
+    let isEnglish = false;
+    const langToggle = document.getElementById('langToggle');
+    const langElements = document.querySelectorAll('.lang');
+
+    langToggle.addEventListener('click', () => {
+        isEnglish = !isEnglish;
+        langToggle.innerText = isEnglish ? 'VIE' : 'ENG';
+        langElements.forEach(el => {
+            el.innerText = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-vi');
+        });
+    });
+</script>
+
 </body>
 </html>
+
+
