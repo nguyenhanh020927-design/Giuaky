@@ -327,7 +327,11 @@
 </div>
 
 <script>
-    // 1. XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ SÁNG/TỐI
+    // === BIẾN TOÀN CỤC CHO NGÔN NGỮ ===
+    let isEnglish = false;
+    let chartInstance = null; // Biến lưu trữ biểu đồ để update sau
+
+    // 1. XỬ LÝ CHUYỂN ĐỔI CHẾ ĐỘ SÁNG/TỐI (TỰ ĐỘNG ĐỔI MÀU TRỤC CHART.JS)
     const themeToggle = document.getElementById('themeToggle');
     const heroVideo = document.getElementById('heroVideo');
 
@@ -340,22 +344,47 @@
         heroVideo.src = isDark ? '2.mp4' : '3.mp4'; 
         heroVideo.load(); heroVideo.play();
         
-        // Cập nhật màu chữ Chart.js cho tương phản
-        Chart.defaults.color = isDark ? '#ffffff' : '#000000';
-        if (Chart.instances.length > 0) {
-            Chart.instances[0].update();
+        // Cập nhật màu chữ Chart.js cho tương phản ngay lập tức
+        if (chartInstance) {
+            const newColor = isDark ? '#ffffff' : '#000000';
+            Chart.defaults.color = newColor;
+            
+            // Cập nhật chi tiết các trục X Y
+            chartInstance.options.scales.x.ticks.color = newColor;
+            chartInstance.options.scales.y.ticks.color = newColor;
+            chartInstance.options.scales.x.title.color = newColor;
+            chartInstance.options.scales.y.title.color = newColor;
+            chartInstance.options.plugins.legend.labels.color = newColor;
+            
+            chartInstance.update();
         }
     });
 
-    // 2. XỬ LÝ NGÔN NGỮ (ENG/VIE)
-    let isEnglish = false;
+    // 2. XỬ LÝ NGÔN NGỮ (ENG/VIE) BAO GỒM CẢ BÊN TRONG CHART.JS
     const langToggle = document.getElementById('langToggle');
     langToggle.addEventListener('click', () => {
         isEnglish = !isEnglish;
         langToggle.innerText = isEnglish ? 'VIE' : 'ENG';
+        
+        // Dịch các thẻ HTML thông thường
         document.querySelectorAll('.lang').forEach(el => {
             el.innerHTML = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-vi');
         });
+
+        // Dịch nội dung bên trong Chart.js
+        if (chartInstance) {
+            chartInstance.data.datasets[0].label = isEnglish ? 'Close Price' : 'Giá Đóng Cửa';
+            chartInstance.data.datasets[1].label = isEnglish ? 'Open Price' : 'Giá Mở Cửa';
+            chartInstance.options.scales.x.title.text = isEnglish ? 'Time (Trading Session)' : 'Thời Gian (Phiên Giao Dịch)';
+            chartInstance.options.scales.y.title.text = isEnglish ? 'Price Level (VND)' : 'Mức Giá (VNĐ)';
+            
+            // Cập nhật lại nhãn "Phiên 1" thành "Session 1"
+            chartInstance.data.labels = chartInstance.data.labels.map((label, index) => {
+                return isEnglish ? `Session ${index + 1}` : `Phiên ${index + 1}`;
+            });
+            
+            chartInstance.update();
+        }
     });
 
     // 3. LOGIC CLICK PHÓNG TO ẢNH
@@ -372,7 +401,7 @@
     closeModal.onclick = function() { modal.style.display = "none"; }
     modal.onclick = function(e) { if(e.target !== imgModal) modal.style.display = "none"; }
 
-    // 4. CHART.JS (ĐỌC FILE TSV VÀ HIỂN THỊ)
+    // 4. CHART.JS (ĐỌC FILE TSV VÀ TÍCH HỢP NGÔN NGỮ)
     async function loadDataAndDrawChart() {
         try {
             const response = await fetch('sv05.tsv');
@@ -386,33 +415,39 @@
                 if (columns.length >= 7) {
                     openPrices.push(parseFloat(columns[0])); 
                     closePrices.push(parseFloat(columns[6])); 
-                    labels.push(`Phiên ${index + 1}`);
+                    // Chữ khởi tạo ban đầu dựa theo nút ngôn ngữ
+                    labels.push(isEnglish ? `Session ${index + 1}` : `Phiên ${index + 1}`);
                 }
             });
 
             const ctxChart = document.getElementById('luxuryChart').getContext('2d');
             
-            // Thiết lập màu sắc Chart.js ban đầu (Đen trong suốt ở Light Mode)
+            // Màu mặc định lúc load trang (Light Mode)
+            const isDark = document.body.classList.contains('dark-mode');
+            const initialColor = isDark ? '#ffffff' : '#000000';
             Chart.defaults.font.family = 'Montserrat'; 
-            Chart.defaults.color = '#000000'; 
+            Chart.defaults.color = initialColor; 
 
             let grad = ctxChart.createLinearGradient(0, 0, 0, 400);
             grad.addColorStop(0, 'rgba(184, 151, 74, 0.4)'); 
             grad.addColorStop(1, 'rgba(184, 151, 74, 0.0)'); 
 
-            new Chart(ctxChart, {
+            // Khởi tạo và gán vào biến toàn cục chartInstance
+            chartInstance = new Chart(ctxChart, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [
                         { 
-                            label: 'Giá Đóng Cửa', data: closePrices, 
+                            label: isEnglish ? 'Close Price' : 'Giá Đóng Cửa', 
+                            data: closePrices, 
                             borderColor: '#b8974a', borderWidth: 2, 
                             backgroundColor: grad, fill: true, 
                             pointRadius: 0, pointHoverRadius: 5, tension: 0.2 
                         },
                         { 
-                            label: 'Giá Mở Cửa', data: openPrices, 
+                            label: isEnglish ? 'Open Price' : 'Giá Mở Cửa', 
+                            data: openPrices, 
                             borderColor: '#888888', borderWidth: 1.5, borderDash: [4, 4], 
                             fill: false, pointRadius: 0, pointHoverRadius: 5, tension: 0.2 
                         }
@@ -425,16 +460,21 @@
                         legend: { position: 'top', labels: { font: { weight: 'bold' } } },
                         tooltip: { 
                             backgroundColor: 'rgba(0,0,0,0.85)', titleFont: { size: 14, color: '#fff' }, bodyFont: { size: 13, color: '#fff' }, padding: 12,
-                            callbacks: { label: function(context) { return ' ' + context.dataset.label + ': ' + context.parsed.y + ' VNĐ'; } }
+                            callbacks: { 
+                                label: function(context) { 
+                                    const currency = isEnglish ? 'VND' : 'VNĐ';
+                                    return ' ' + context.dataset.label + ': ' + context.parsed.y + ' ' + currency; 
+                                } 
+                            }
                         } 
                     },
                     scales: {
                         x: { 
-                            title: { display: true, text: 'Thời Gian (Phiên Giao Dịch)', font: { size: 13, weight: 'bold' } },
+                            title: { display: true, text: isEnglish ? 'Time (Trading Session)' : 'Thời Gian (Phiên Giao Dịch)', font: { size: 13, weight: 'bold' } },
                             grid: { display: false }, ticks: { maxTicksLimit: 15 } 
                         },
                         y: { 
-                            title: { display: true, text: 'Mức Giá (VNĐ)', font: { size: 13, weight: 'bold' } },
+                            title: { display: true, text: isEnglish ? 'Price Level (VND)' : 'Mức Giá (VNĐ)', font: { size: 13, weight: 'bold' } },
                             grid: { color: 'rgba(136,136,136,0.3)', borderDash: [3, 3] }
                         }
                     }
