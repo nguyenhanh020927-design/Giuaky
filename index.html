@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
     
+    <!-- === LOGO CÁ NHÂN TRÊN TAB TRÌNH DUYỆT (FAVICON) === -->
+    <link rel="icon" type="image/png" href="logo_ca_nhan.png">
+    
     <!-- Font chữ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -172,15 +175,40 @@
         .close { position: absolute; top: 25px; right: 45px; color: #f1f1f1; font-size: 45px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
         .close:hover { color: var(--accent); }
 
-        /* === FOOTER VÀ LIÊN KẾT MẠNG XÃ HỘI === */
-        footer { background: var(--bg-card); color: var(--text-main); text-align: center; padding: 60px 20px; border-top: 4px solid var(--accent); margin-top: 50px; box-shadow: 0 -5px 20px var(--shadow); }
-        footer h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin: 0 0 20px 0; color: var(--accent); letter-spacing: 1px; }
+        /* === FOOTER TRẢI NGANG === */
+        footer { 
+            background: var(--bg-card); 
+            color: var(--text-main); 
+            padding: 50px 40px; 
+            border-top: 4px solid var(--accent); 
+            margin-top: 50px; 
+            box-shadow: 0 -5px 20px var(--shadow); 
+        }
+        
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1300px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .footer-col { flex: 1; min-width: 250px; }
+        .footer-col.left { text-align: left; }
+        .footer-col.center { text-align: center; }
+        .footer-col.right { text-align: right; }
+
+        footer h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin: 0 0 15px 0; color: var(--accent); letter-spacing: 1px; }
         footer p { font-size: 13px; font-weight: 500; letter-spacing: 1.5px; opacity: 0.8; margin: 8px 0; line-height: 1.8; }
         footer strong { font-weight: 700; color: var(--text-main); }
         
-        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 25px; flex-wrap: wrap; }
-        .social-links a { text-decoration: none; color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid transparent; transition: all 0.3s ease; }
-        .social-links a:hover { color: var(--accent); border-bottom: 1px solid var(--accent); }
+        .social-links { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+        .social-links a { text-decoration: none; color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--accent); }
+
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); opacity: 0.5; font-size: 11px; letter-spacing: 1px; }
 
         /* =========================================================
            TỐI ƯU HÓA HOÀN HẢO CHO ĐIỆN THOẠI (RESPONSIVE)
@@ -214,7 +242,10 @@
             .dior-title { font-size: 32px; }
             .dior-subtitle { font-size: 10px; }
             
-            .social-links { gap: 15px; }
+            /* Footer mobile */
+            .footer-container { flex-direction: column; align-items: center; text-align: center; gap: 40px; }
+            .footer-col { text-align: center !important; }
+            .social-links { align-items: center; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 15px; }
             .social-links a { font-size: 10px; }
         }
     </style>
@@ -243,8 +274,14 @@
             <img src="logo_truong.png" class="uni-logo" alt="Logo Trường">
 
             <div class="author-info">
-                <p><strong class="lang" data-vi="Giảng viên bộ môn:" data-en="Lecturer:">Giảng viên bộ môn:</strong> Phan Trần Đức Minh</p>
-                <p><strong class="lang" data-vi="Sinh viên thực hiện:" data-en="Student:">Sinh viên thực hiện:</strong> Nguyễn Thị Hạnh</p>
+                <p>
+                    <strong class="lang" data-vi="Giảng viên bộ môn:" data-en="Lecturer:">Giảng viên bộ môn:</strong> 
+                    <span class="lang" data-vi="Phan Trần Đức Minh" data-en="Phan Tran Duc Minh">Phan Trần Đức Minh</span>
+                </p>
+                <p>
+                    <strong class="lang" data-vi="Sinh viên thực hiện:" data-en="Student:">Sinh viên thực hiện:</strong> 
+                    <span class="lang" data-vi="Nguyễn Thị Hạnh" data-en="Nguyen Thi Hanh">Nguyễn Thị Hạnh</span>
+                </p>
             </div>
         </div>
 
@@ -355,23 +392,38 @@
 
 </div>
 
-<!-- FOOTER -->
+<!-- FOOTER TRẢI NGANG -->
 <footer>
-    <h3 class="lang" data-vi="Thông Tin Liên Hệ" data-en="Contact Information">Thông Tin Liên Hệ</h3>
-    <p><strong class="lang" data-vi="Sinh viên:" data-en="Student:">Sinh viên:</strong> Nguyễn Thị Hạnh &nbsp;|&nbsp; <strong>MSSV:</strong> 3110525005 &nbsp;|&nbsp; <strong class="lang" data-vi="Lớp:" data-en="Class:">Lớp:</strong> 25CKDL</p>
-    <p class="lang" data-vi="Khoa Toán - Tin, Đại học Sư phạm - Đại học Đà Nẵng" data-en="Faculty of Mathematics and IT, University of Science and Education - The University of Da Nang">Khoa Toán - Tin, Đại học Sư phạm - Đại học Đà Nẵng</p>
-    <p><em class="lang" data-vi="Chuyên ngành: Khoa Học Dữ Liệu" data-en="Major: Data Science">Chuyên ngành: Khoa Học Dữ Liệu</em></p>
-    
-    <!-- LIÊN KẾT MẠNG XÃ HỘI & CONTACT -->
-    <div class="social-links">
-        <a href="tel:0384390938">SĐT: 038 439 0938</a>
-        <a href="mailto:nguyenhanh020927@gmail.com">Email</a>
-        <a href="https://www.facebook.com/hanh.nguyen.106406" target="_blank">Facebook</a>
-        <a href="https://www.instagram.com/hey_hanh29/" target="_blank">Instagram</a>
-        <a href="https://www.tiktok.com/@heyhanh.29?_r=1&_t=ZS-9AxIX79McPX" target="_blank">TikTok</a>
+    <div class="footer-container">
+        <!-- Cột Trái: Thông tin Sinh Viên -->
+        <div class="footer-col left">
+            <p><strong class="lang" data-vi="Sinh viên:" data-en="Student:">Sinh viên:</strong> <span class="lang" data-vi="Nguyễn Thị Hạnh" data-en="Nguyen Thi Hanh">Nguyễn Thị Hạnh</span></p>
+            <p><strong>MSSV:</strong> 3110525005</p>
+            <p><strong class="lang" data-vi="Lớp:" data-en="Class:">Lớp:</strong> 25CKDL</p>
+            <p><em class="lang" data-vi="Chuyên ngành: Khoa Học Dữ Liệu" data-en="Major: Data Science">Chuyên ngành: Khoa Học Dữ Liệu</em></p>
+        </div>
+
+        <!-- Cột Giữa: Tiêu đề & Tên Trường -->
+        <div class="footer-col center">
+            <h3 class="lang" data-vi="Thông Tin Liên Hệ" data-en="Contact Information">Thông Tin Liên Hệ</h3>
+            <p class="lang" data-vi="Khoa Toán - Tin, Đại học Sư phạm - Đại học Đà Nẵng" data-en="Faculty of Mathematics and IT, University of Science and Education - The University of Da Nang">Khoa Toán - Tin, Đại học Sư phạm - Đại học Đà Nẵng</p>
+        </div>
+
+        <!-- Cột Phải: Mạng Xã Hội -->
+        <div class="footer-col right">
+            <div class="social-links">
+                <a href="tel:0384390938">SĐT: 038 439 0938</a>
+                <a href="mailto:nguyenhanh020927@gmail.com">Email</a>
+                <a href="https://www.facebook.com/hanh.nguyen.106406" target="_blank">Facebook</a>
+                <a href="https://www.instagram.com/hey_hanh29/" target="_blank">Instagram</a>
+                <a href="https://www.tiktok.com/@heyhanh.29?_r=1&_t=ZS-9AxIX79McPX" target="_blank">TikTok</a>
+            </div>
+        </div>
     </div>
 
-    <p class="lang" data-vi="&copy; 2026 Báo cáo giữa kỳ phân tích chứng khoán python." data-en="&copy; 2026 Python stock analysis midterm report." style="margin-top: 25px; opacity: 0.5; font-size: 11px;">&copy; 2026 Báo cáo giữa kỳ phân tích chứng khoán python.</p>
+    <div class="footer-bottom">
+        <p class="lang" data-vi="&copy; 2026 Báo cáo giữa kỳ phân tích chứng khoán python." data-en="&copy; 2026 Python stock analysis midterm report.">&copy; 2026 Báo cáo giữa kỳ phân tích chứng khoán python.</p>
+    </div>
 </footer>
 
 <!-- MODAL ẢNH -->
