@@ -8,7 +8,7 @@
     <!-- Font chữ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Thư viện Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -27,7 +27,7 @@
         /* === TRƯỢT MƯỢT === */
         html { scroll-behavior: smooth; }
 
-        /* === MÀU SẮC SÁNG/TỐI (ĐEN/TRẮNG CHUẨN) === */
+        /* === MÀU SẮC SÁNG/TỐI === */
         :root {
             --bg-body: #ffffff;       
             --bg-card: #ffffff;       
@@ -38,7 +38,7 @@
             --up-color: #1b5e20;      
             --down-color: #b71c1c;    
             --shadow: rgba(0, 0, 0, 0.05); 
-            --video-overlay: transparent; /* XÓA MÀNG MỜ ĐỂ VIDEO NÉT 100% Ở LIGHT MODE */
+            --video-overlay: transparent; 
         }
 
         body.dark-mode {
@@ -50,7 +50,7 @@
             --up-color: #4caf50;      
             --down-color: #f44336;    
             --shadow: rgba(255, 255, 255, 0.03); 
-            --video-overlay: rgba(0, 0, 0, 0.5); /* Tối mờ để nổi chữ trắng ở Dark Mode */
+            --video-overlay: rgba(0, 0, 0, 0.5); 
         }
 
         body { 
@@ -62,23 +62,91 @@
             overflow-x: hidden; 
         }
 
-        /* === HERO BANNER === */
-        .hero-section {
-            position: relative; width: 100%; height: 95vh;
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        /* === HERO BANNER PHONG CÁCH DIOR (SPLIT SCREEN) === */
+        .hero-split {
+            display: flex;
+            width: 100%;
+            height: 100vh;
             background: var(--bg-body);
         }
+
+        /* NỬA TRÁI: VIDEO */
+        .hero-left {
+            flex: 0 0 50%; /* Chiếm 50% màn hình */
+            position: relative;
+            overflow: hidden;
+        }
         .hero-video {
-            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
-            transform: translate(-50%, -50%); z-index: 0; object-fit: cover;
+            position: absolute; top: 50%; left: 50%; 
+            min-width: 100%; min-height: 100%;
+            transform: translate(-50%, -50%); 
+            z-index: 0; object-fit: cover;
         }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--video-overlay); z-index: 1; transition: background 0.4s ease;
         }
-        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--text-main); transition: color 0.4s ease; }
-        .hero-content h1 { font-family: 'Cormorant Garamond', serif; font-size: 72px; margin: 0 0 15px 0; font-weight: 600; letter-spacing: 2px; }
-        .hero-content p { font-size: 15px; font-weight: 600; letter-spacing: 6px; text-transform: uppercase; margin: 0; opacity: 0.9; }
+        .hero-content { 
+            position: absolute; bottom: 10%; left: 10%; z-index: 2; 
+            color: var(--text-main); transition: color 0.4s ease; text-align: left;
+        }
+        .hero-content h1 { font-family: 'Cormorant Garamond', serif; font-size: 52px; margin: 0 0 10px 0; font-weight: 500; letter-spacing: 2px; }
+        .hero-content p { font-size: 13px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; margin: 0; opacity: 0.9; }
+
+        /* NỬA PHẢI: BẢNG THÔNG TIN SANG TRỌNG */
+        .hero-right {
+            flex: 1;
+            position: relative;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 40px; text-align: center;
+            border-left: 1px solid var(--border-color);
+            background: var(--bg-body);
+            overflow: hidden;
+        }
+
+        /* HỌA TIẾT TRỐNG ĐỒNG IN CHÌM (WATERMARK) */
+        .trong-dong-watermark {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%; max-width: 600px;
+            opacity: 0.04; /* Siêu mờ để giữ nét tinh tế */
+            color: var(--text-main);
+            pointer-events: none;
+            z-index: 0;
+            transition: color 0.4s ease;
+        }
+
+        .dior-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 500;
+            margin: 0 0 10px 0; letter-spacing: 2px; position: relative; z-index: 1;
+        }
+        .dior-subtitle {
+            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px;
+            color: var(--text-muted); margin: 0 0 50px 0; position: relative; z-index: 1;
+        }
+        
+        .uni-logo {
+            width: 150px; height: auto; margin-bottom: 50px;
+            position: relative; z-index: 1;
+            filter: drop-shadow(0 10px 20px var(--shadow));
+        }
+
+        .author-info {
+            position: relative; z-index: 1;
+            font-family: 'Cormorant Garamond', serif; font-size: 20px;
+            line-height: 1.8; text-align: center;
+        }
+        .author-info p { margin: 5px 0; }
+        .author-info strong { font-family: 'Montserrat', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-right: 10px; }
+
+        /* ĐÁP ỨNG TRÊN ĐIỆN THOẠI (Xếp dọc) */
+        @media (max-width: 900px) {
+            .hero-split { flex-direction: column; height: auto; }
+            .hero-left { height: 50vh; }
+            .hero-right { height: 50vh; border-left: none; border-bottom: 1px solid var(--border-color); }
+        }
 
         /* === NAVBAR BÁM ĐỈNH === */
         .navbar {
@@ -105,13 +173,6 @@
         .scroll-offset { scroll-margin-top: 100px; }
 
         .container { max-width: 1300px; margin: 0 auto; padding: 60px 20px; }
-
-        /* === THÔNG TIN HEADER === */
-        .info-header { 
-            text-align: center; font-size: 12px; font-weight: 600; text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 70px;
-            border-bottom: 1px solid var(--border-color); padding-bottom: 30px;
-        }
 
         /* === KPI ĐẢO NỔI === */
         .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 25px; margin-bottom: 90px; }
@@ -170,15 +231,47 @@
 
 <body>
 
-<div class="hero-section" id="home">
-    <video id="heroVideo" class="hero-video" autoplay loop muted playsinline src="3.mp4"></video>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <h1 class="lang" data-vi="Báo Cáo Giữa Kỳ" data-en="Midterm Report">Báo Cáo Giữa Kỳ</h1>
-        <p class="lang" data-vi="Mô Phỏng & Phân Tích Dữ Liệu Chứng Khoán" data-en="Stock Data Simulation & Analysis">Mô Phỏng & Phân Tích Dữ Liệu Chứng Khoán</p>
+<!-- HERO BANNER (SPLIT SCREEN PHONG CÁCH DIOR) -->
+<div class="hero-split" id="home">
+    
+    <!-- CỘT TRÁI: VIDEO NỀN -->
+    <div class="hero-left">
+        <video id="heroVideo" class="hero-video" autoplay loop muted playsinline src="3.mp4"></video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="lang" data-vi="Báo Cáo Giữa Kỳ" data-en="Midterm Report">Báo Cáo Giữa Kỳ</h1>
+            <p class="lang" data-vi="Mô Phỏng Phân Tích Cổ Phiếu" data-en="Stock Data Simulation">Mô Phỏng Phân Tích Cổ Phiếu</p>
+        </div>
+    </div>
+
+    <!-- CỘT PHẢI: THÔNG TIN SANG TRỌNG -->
+    <div class="hero-right">
+        
+        <!-- MÃ SVG VẼ TRỐNG ĐỒNG IN CHÌM TRỰC TIẾP TRÊN WEB -->
+        <svg class="trong-dong-watermark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="0.5" fill="none" />
+            <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="1.5" fill="none" stroke-dasharray="2,2" />
+            <circle cx="50" cy="50" r="32" stroke="currentColor" stroke-width="0.5" fill="none" />
+            <circle cx="50" cy="50" r="28" stroke="currentColor" stroke-width="1" fill="none" />
+            <!-- Ngôi sao 10 cánh đặc trưng giữa trống đồng -->
+            <path d="M50 20 L54 33 L67 29 L59 40 L72 44 L60 50 L72 56 L59 60 L67 71 L54 67 L50 80 L46 67 L33 71 L41 60 L28 56 L40 50 L28 44 L41 40 L33 29 L46 33 Z" fill="currentColor" opacity="0.8"/>
+            <circle cx="50" cy="50" r="10" stroke="var(--bg-body)" stroke-width="2" fill="none" />
+        </svg>
+
+        <h2 class="dior-title lang" data-vi="Iconic creations" data-en="Iconic creations">Iconic creations</h2>
+        <p class="dior-subtitle lang" data-vi="Trường Đại học Sư phạm - Đại học Đà Nẵng" data-en="University of Science and Education - UD">Trường Đại học Sư phạm - Đại học Đà Nẵng</p>
+        
+        <!-- Bà nhớ chèn file logo trường vào đúng tên logo_truong.png nha -->
+        <img src="logo_truong.png" class="uni-logo" alt="Logo Trường Đại học Sư phạm Đà Nẵng">
+
+        <div class="author-info">
+            <p><strong class="lang" data-vi="Giảng viên bộ môn:" data-en="Lecturer:">Giảng viên bộ môn:</strong> Phan Trần Đức Minh</p>
+            <p><strong class="lang" data-vi="Sinh viên thực hiện:" data-en="Student:">Sinh viên thực hiện:</strong> Nguyễn Thị Hạnh</p>
+        </div>
     </div>
 </div>
 
+<!-- NAVBAR BÁM ĐỈNH NẰM DƯỚI BANNER -->
 <div class="navbar">
     <div class="nav-brand">25CKDL</div>
     <div class="nav-links">
@@ -196,12 +289,6 @@
 
 <div class="container">
     
-    <div class="info-header">
-        <p class="lang" data-vi="Thực hiện: Nguyễn Thị Hạnh &nbsp;|&nbsp; Lớp: 25CKDL &nbsp;|&nbsp; MSSV: 3110525005 &nbsp;|&nbsp; Dữ liệu: abc-5" data-en="By: Nguyen Thi Hanh | Class: 25CKDL | ID: 3110525005 | Data: abc-5">
-           Thực hiện: Nguyễn Thị Hạnh &nbsp;|&nbsp; Lớp: 25CKDL &nbsp;|&nbsp; MSSV: 3110525005 &nbsp;|&nbsp; Dữ liệu: abc-5
-        </p>
-    </div>
-
     <!-- TỔNG QUAN KPI -->
     <div class="kpi-grid scroll-offset" id="kpi-section">
         <div class="kpi-item">
