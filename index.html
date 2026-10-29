@@ -100,12 +100,8 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             background: var(--bg-body); padding: 40px; text-align: center; pointer-events: none; 
             transition: opacity 0.8s ease; 
-            
-            /* TÍCH HỢP ẢNH TRỐNG ĐỒNG */
-            background-image: url('trongdong.png');
-            background-repeat: no-repeat;
-            background-position: center center; 
-            background-size: 85% auto; 
+            background-image: url('trongdong.png'); background-repeat: no-repeat;
+            background-position: center center; background-size: 85% auto; 
         }
         
         .hero-right-box::before {
@@ -176,12 +172,15 @@
         .close { position: absolute; top: 25px; right: 45px; color: #f1f1f1; font-size: 45px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
         .close:hover { color: var(--accent); }
 
-        /* === FOOTER === */
+        /* === FOOTER VÀ LIÊN KẾT MẠNG XÃ HỘI === */
         footer { background: var(--bg-card); color: var(--text-main); text-align: center; padding: 60px 20px; border-top: 4px solid var(--accent); margin-top: 50px; box-shadow: 0 -5px 20px var(--shadow); }
         footer h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin: 0 0 20px 0; color: var(--accent); letter-spacing: 1px; }
         footer p { font-size: 13px; font-weight: 500; letter-spacing: 1.5px; opacity: 0.8; margin: 8px 0; line-height: 1.8; }
         footer strong { font-weight: 700; color: var(--text-main); }
-
+        
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 25px; flex-wrap: wrap; }
+        .social-links a { text-decoration: none; color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid transparent; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--accent); border-bottom: 1px solid var(--accent); }
 
         /* =========================================================
            TỐI ƯU HÓA HOÀN HẢO CHO ĐIỆN THOẠI (RESPONSIVE)
@@ -193,33 +192,16 @@
             .hero-center-text { opacity: 1 !important; transform: translate(-50%, -50%) scale(0.7) !important; }
             .hero-right-box { width: 100% !important; height: auto; position: relative; opacity: 1 !important; pointer-events: auto !important; padding: 50px 20px; border-top: 1px solid var(--border-color); }
 
-            /* === ĐÃ FIX NAVBAR MOBILE NHỎ GỌN, SANG TRỌNG === */
-            .navbar { 
-                padding: 12px 20px; 
-                flex-wrap: wrap; /* Cho phép xếp thành 2 tầng */
-            }
+            .navbar { padding: 12px 20px; flex-wrap: wrap; }
             .nav-brand { font-size: 18px; }
             .controls button { padding: 6px 12px; font-size: 9px; }
             
-            /* Biến các đường link thành thanh lướt ngang siêu gọn */
-            .nav-links { 
-                width: 100%; 
-                justify-content: flex-start; 
-                flex-wrap: nowrap; /* Không cho rớt dòng */
-                overflow-x: auto; /* Vuốt lướt ngang */
-                gap: 20px; 
-                padding-top: 12px; 
-                margin-top: 5px; 
-                border-top: 1px solid var(--border-color); 
-                -webkit-overflow-scrolling: touch;
-            }
-            /* Ẩn thanh cuộn xấu xí */
+            .nav-links { width: 100%; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; gap: 20px; padding-top: 12px; margin-top: 5px; border-top: 1px solid var(--border-color); -webkit-overflow-scrolling: touch; }
             .nav-links::-webkit-scrollbar { display: none; }
             .nav-links a { font-size: 10px; white-space: nowrap; }
 
             .container { padding: 40px 15px; }
 
-            /* Bảng KPI trượt ngang */
             .kpi-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; padding-bottom: 20px; margin-bottom: 60px; -webkit-overflow-scrolling: touch; }
             .kpi-grid::-webkit-scrollbar { height: 4px; }
             .kpi-grid::-webkit-scrollbar-track { background: transparent; }
@@ -231,6 +213,9 @@
             .image-grid { grid-template-columns: 1fr; gap: 40px; }
             .dior-title { font-size: 32px; }
             .dior-subtitle { font-size: 10px; }
+            
+            .social-links { gap: 15px; }
+            .social-links a { font-size: 10px; }
         }
     </style>
 </head>
@@ -376,7 +361,17 @@
     <p><strong class="lang" data-vi="Sinh viên:" data-en="Student:">Sinh viên:</strong> Nguyễn Thị Hạnh &nbsp;|&nbsp; <strong>MSSV:</strong> 3110525005 &nbsp;|&nbsp; <strong class="lang" data-vi="Lớp:" data-en="Class:">Lớp:</strong> 25CKDL</p>
     <p class="lang" data-vi="Khoa Toán - Tin, Đại học Sư phạm - Đại học Đà Nẵng" data-en="Faculty of Mathematics and IT, University of Science and Education - The University of Da Nang">Khoa Toán - Tin, Đại học Sư phạm - Đại học Đà Nẵng</p>
     <p><em class="lang" data-vi="Chuyên ngành: Khoa Học Dữ Liệu" data-en="Major: Data Science">Chuyên ngành: Khoa Học Dữ Liệu</em></p>
-    <p class="lang" data-vi="&copy; 2026 Báo cáo giữa kỳ phân tích chứng khoán python." data-en="&copy; 2026 Python stock analysis midterm report." style="margin-top: 15px; opacity: 0.5; font-size: 11px;">&copy; 2026 Báo cáo giữa kỳ phân tích chứng khoán python.</p>
+    
+    <!-- LIÊN KẾT MẠNG XÃ HỘI & CONTACT -->
+    <div class="social-links">
+        <a href="tel:0384390938">SĐT: 038 439 0938</a>
+        <a href="mailto:nguyenhanh020927@gmail.com">Email</a>
+        <a href="https://www.facebook.com/hanh.nguyen.106406" target="_blank">Facebook</a>
+        <a href="https://www.instagram.com/hey_hanh29/" target="_blank">Instagram</a>
+        <a href="https://www.tiktok.com/@heyhanh.29?_r=1&_t=ZS-9AxIX79McPX" target="_blank">TikTok</a>
+    </div>
+
+    <p class="lang" data-vi="&copy; 2026 Báo cáo giữa kỳ phân tích chứng khoán python." data-en="&copy; 2026 Python stock analysis midterm report." style="margin-top: 25px; opacity: 0.5; font-size: 11px;">&copy; 2026 Báo cáo giữa kỳ phân tích chứng khoán python.</p>
 </footer>
 
 <!-- MODAL ẢNH -->
@@ -389,9 +384,9 @@
     let isEnglish = false;
     let chartInstance = null; 
 
-    // === 1. THUẬT TOÁN "SNAP CHIA ĐÔI MÀN HÌNH" (LƯỚT NHẸ TỰ RÚT SANG) ===
+    // === 1. THUẬT TOÁN "SNAP CHIA ĐÔI MÀN HÌNH" ===
     window.addEventListener('scroll', () => {
-        if (window.innerWidth <= 900) return; // Không chạy trên ĐT
+        if (window.innerWidth <= 900) return;
 
         const scrollPx = window.scrollY;
         const videoBox = document.getElementById('heroVideoBox');
