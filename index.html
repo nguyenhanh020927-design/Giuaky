@@ -24,6 +24,11 @@
     </script>
 
     <style>
+        /* === SỬA LỖI LỆCH TRỐNG ĐỒNG (Ép mọi phần tử tính toán viền chuẩn xác) === */
+        * {
+            box-sizing: border-box;
+        }
+
         /* === TRƯỢT MƯỢT === */
         html { scroll-behavior: smooth; }
 
@@ -113,16 +118,15 @@
             background-image: url('trongdong.png');
             background-repeat: no-repeat;
             background-position: center center; /* CĂN CHÍNH GIỮA HOÀN HẢO */
-            background-size: 100% auto; /* Độ lớn trống đồng */
-            /* Dùng overlay trắng/đen mờ để che bớt trống đồng đi, tạo hiệu ứng in chìm watermark */
+            background-size: 85% auto; /* Độ lớn trống đồng */
         }
         
         /* Lớp che mờ cho Trống Đồng để không bị chói nét làm lấp chữ */
         .hero-right-box::before {
             content: "";
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-body); /* Lấy màu nền hiện tại Trắng hoặc Đen */
-            opacity: 0.80; /* Mờ 96% để trống đồng hiện lờ mờ 4% đằng sau */
+            background: var(--bg-body); 
+            opacity: 0.80; /* Điều chỉnh độ mờ trống đồng cho sang trọng */
             z-index: 0;
             transition: background 0.4s ease;
         }
@@ -130,8 +134,16 @@
         .dior-title { font-family: 'Cormorant Garamond', serif; font-size: 46px; font-weight: 500; margin: 0 0 10px 0; letter-spacing: 2px; position: relative; z-index: 1; color: var(--accent); }
         .dior-subtitle { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted); margin: 0 0 50px 0; position: relative; z-index: 1; }
         
-        .uni-logo { width: 160px; height: auto; margin-bottom: 50px; position: relative; z-index: 1; filter: drop-shadow(0 10px 20px var(--shadow)); transition: 0.3s ease; }
+        /* === TĂNG KÍCH THƯỚC LOGO TRƯỜNG === */
+        .uni-logo { 
+            width: 250px; /* ĐÃ TĂNG SIZE TỪ 160px LÊN 250px */
+            height: auto; margin-bottom: 50px; position: relative; z-index: 1; 
+            filter: drop-shadow(0 10px 20px var(--shadow)); transition: 0.3s ease; 
+        }
         
+        /* Xử lý Logo trường: Lọc viền trắng khi ở Light Mode (nếu lười xóa phông) */
+        body:not(.dark-mode) .uni-logo { mix-blend-mode: multiply; }
+
         .author-info { position: relative; z-index: 1; font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.8; text-align: center; }
         .author-info p { margin: 5px 0; }
         .author-info strong { font-family: 'Montserrat', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-right: 10px; }
@@ -200,7 +212,6 @@
            TỐI ƯU HÓA HOÀN HẢO CHO ĐIỆN THOẠI (RESPONSIVE)
            ========================================================= */
         @media (max-width: 900px) {
-            /* Tắt tính năng lướt rút gọn của Dior */
             .hero-scroll-track { height: auto; }
             .hero-sticky-container { position: relative; height: auto; flex-direction: column; }
             .hero-video-box { width: 100% !important; height: 50vh; }
@@ -211,7 +222,6 @@
                 padding: 50px 20px; border-top: 1px solid var(--border-color); 
             }
 
-            /* Chỉnh lại Navbar gọn gàng trên mobile */
             .navbar { padding: 15px 20px; flex-direction: column; gap: 15px; }
             .nav-brand { margin-bottom: 5px; }
             .nav-links { gap: 15px; }
@@ -219,29 +229,23 @@
 
             .container { padding: 40px 15px; }
 
-            /* Fix tràn viền KPI: Tạo chế độ trượt ngang (Horizontal Scroll) */
             .kpi-grid { 
                 display: flex; 
-                overflow-x: auto; /* Cho phép cuộn ngang */
-                scroll-snap-type: x mandatory; /* Cuộn theo từng khối */
+                overflow-x: auto; 
+                scroll-snap-type: x mandatory; 
                 gap: 15px; 
-                padding-bottom: 20px; /* Chỗ cho thanh scroll */
+                padding-bottom: 20px; 
                 margin-bottom: 60px;
-                /* Ẩn thanh cuộn xấu xí trên Chrome/Safari */
                 -webkit-overflow-scrolling: touch;
             }
             .kpi-grid::-webkit-scrollbar { height: 4px; }
             .kpi-grid::-webkit-scrollbar-track { background: transparent; }
             .kpi-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
             
-            .kpi-item { 
-                flex: 0 0 75%; /* Mỗi ô chiếm 75% màn hình để thấy có ô tiếp theo */
-                scroll-snap-align: center; 
-            }
+            .kpi-item { flex: 0 0 75%; scroll-snap-align: center; }
             
             h2 { font-size: 24px; }
 
-            /* Fix biểu đồ Chart.js và Ảnh cho điện thoại */
             .interactive-chart-wrapper { padding: 20px 10px; }
             .image-grid { grid-template-columns: 1fr; gap: 40px; }
             .dior-title { font-size: 32px; }
@@ -252,9 +256,7 @@
 
 <body>
 
-<!-- ========================================== -->
-<!-- HERO SCROLL TRACK (Tự rút sang khi cuộn) -->
-<!-- ========================================== -->
+<!-- HERO SCROLL TRACK -->
 <div class="hero-scroll-track" id="home">
     <div class="hero-sticky-container">
         
@@ -270,11 +272,10 @@
 
         <div class="hero-right-box" id="heroRightBox">
             
-            <!-- Trống Đồng được in chìm làm hình nền (Background Image) trong CSS -->
-
             <h2 class="dior-title lang" data-vi="Iconic creations" data-en="Iconic creations">Iconic creations</h2>
             <p class="dior-subtitle lang" data-vi="Trường Đại học Sư phạm - Đại học Đà Nẵng" data-en="University of Science and Education - UD">Trường Đại học Sư phạm - Đại học Đà Nẵng</p>
             
+            <!-- Logo trường đã được phóng to -->
             <img src="logo_truong.png" class="uni-logo" alt="Logo Trường">
 
             <div class="author-info">
