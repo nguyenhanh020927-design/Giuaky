@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo Cáo Giữa Kỳ - Phân Tích Chứng Khoán</title>
     
+    <!-- Font chữ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Thư viện Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- MẬT KHẨU BẢO VỆ -->
     <script>
         var password = "py25ckdl"; 
         var input = prompt("Vui lòng nhập mật khẩu để truy cập (Mật khẩu: py25ckdl):");
@@ -20,9 +24,10 @@
     </script>
 
     <style>
+        /* === TRƯỢT MƯỢT === */
         html { scroll-behavior: smooth; }
 
-        /* === BẢNG MÀU === */
+        /* === MÀU SẮC SÁNG/TỐI === */
         :root {
             --bg-body: #ffffff;       
             --bg-card: #ffffff;       
@@ -58,99 +63,78 @@
         }
 
         /* =========================================================
-           HIỆU ỨNG DIOR: SCROLL ĐỂ CHIA ĐÔI MÀN HÌNH (SPLIT SCREEN)
+           HIỆU ỨNG DIOR: LƯỚT NHẸ TỰ RÚT SANG (SNAP SPLIT SCREEN)
            ========================================================= */
         
-        /* 1. Đường ray (Track) dài 2 màn hình để tạo không gian cuộn chuột */
+        /* Đường ray ngắn lại để cuộn qua nhanh hơn */
         .hero-scroll-track {
-            height: 200vh;
+            height: 120vh; 
             width: 100%;
             position: relative;
         }
 
-        /* 2. Khung cố định bám dính khi cuộn */
         .hero-sticky-container {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            overflow: hidden;
+            position: sticky; top: 0;
+            height: 100vh; width: 100%;
+            display: flex; overflow: hidden;
             background: var(--bg-body);
         }
 
-        /* 3. Khung chứa Video (Ban đầu 100% -> thu về 50%) */
+        /* Khung Video: Thêm transition siêu mượt 0.8s */
         .hero-video-box {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            z-index: 2; /* Nằm đè lên khung phải */
-            will-change: width; /* Tối ưu hóa chuyển động */
+            width: 100%; height: 100%;
+            position: relative; z-index: 2; 
+            will-change: width; 
             box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+            transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        .hero-video-box video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--video-overlay); z-index: 1; transition: background 0.4s ease;
-        }
+        .hero-video-box video { width: 100%; height: 100%; object-fit: cover; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--video-overlay); z-index: 1; transition: background 0.4s ease; }
 
-        /* Chữ lúc ban đầu nằm giữa Video */
+        /* Chữ giữa Video: Thu nhỏ lại thay vì mờ đi */
         .hero-center-text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            position: absolute; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) scale(1);
             text-align: center; width: 100%; z-index: 3; color: var(--text-main);
-            transition: color 0.4s ease;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), color 0.4s ease;
         }
         .hero-center-text h1 { font-family: 'Cormorant Garamond', serif; font-size: 72px; margin: 0 0 15px 0; font-weight: 600; letter-spacing: 2px; }
         .hero-center-text p { font-size: 15px; font-weight: 600; letter-spacing: 6px; text-transform: uppercase; margin: 0; opacity: 0.9; }
 
-        /* 4. Khung Thông tin bên Phải (Nằm sẵn dưới Video, sẽ hiện ra khi video co lại) */
+        /* Khung Thông tin Phải */
         .hero-right-box {
-            width: 50%;
-            height: 100%;
-            position: absolute;
-            right: 0;
-            top: 0;
-            opacity: 0; /* Ban đầu tàng hình */
-            z-index: 1;
+            width: 50%; height: 100%;
+            position: absolute; right: 0; top: 0;
+            opacity: 0; z-index: 1;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             background: var(--bg-body); padding: 40px; text-align: center;
-            pointer-events: none; /* Khóa click khi chưa hiện ra */
+            pointer-events: none; 
+            transition: opacity 0.8s ease; /* Mượt mà hiện ra */
         }
 
-        /* Họa tiết Trống Đồng chìm */
-        .trong-dong-watermark {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90%; max-width: 600px; opacity: 0.04; color: var(--text-main);
-            pointer-events: none; z-index: 0; transition: color 0.4s ease;
-        }
+        .trong-dong-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 600px; opacity: 0.04; color: var(--text-main); pointer-events: none; z-index: 0; transition: color 0.4s ease; }
 
-        /* Nội dung khung phải */
         .dior-title { font-family: 'Cormorant Garamond', serif; font-size: 46px; font-weight: 500; margin: 0 0 10px 0; letter-spacing: 2px; position: relative; z-index: 1; color: var(--accent); }
         .dior-subtitle { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted); margin: 0 0 50px 0; position: relative; z-index: 1; }
-        .uni-logo { width: 160px; height: auto; margin-bottom: 50px; position: relative; z-index: 1; filter: drop-shadow(0 10px 20px var(--shadow)); }
         
+        /* Xử lý Logo trường: Lọc viền trắng khi ở Light Mode (nếu lười xóa phông) */
+        .uni-logo { width: 160px; height: auto; margin-bottom: 50px; position: relative; z-index: 1; filter: drop-shadow(0 10px 20px var(--shadow)); transition: 0.3s ease; }
+        body:not(.dark-mode) .uni-logo { mix-blend-mode: multiply; }
+
         .author-info { position: relative; z-index: 1; font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.8; text-align: center; }
         .author-info p { margin: 5px 0; }
         .author-info strong { font-family: 'Montserrat', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-right: 10px; }
 
-        /* ĐIỆN THOẠI KHÔNG CHẠY HIỆU ỨNG CUỘN (Xếp dọc luôn) */
+        /* Mobile */
         @media (max-width: 900px) {
             .hero-scroll-track { height: auto; }
             .hero-sticky-container { position: relative; height: auto; flex-direction: column; }
             .hero-video-box { width: 100% !important; height: 60vh; }
-            .hero-center-text { opacity: 1 !important; }
-            .hero-right-box { 
-                width: 100% !important; height: auto; position: relative; 
-                opacity: 1 !important; pointer-events: auto !important;
-                padding: 60px 20px; border-top: 1px solid var(--border-color); 
-            }
+            .hero-center-text { opacity: 1 !important; transform: translate(-50%, -50%) scale(0.8) !important; }
+            .hero-right-box { width: 100% !important; height: auto; position: relative; opacity: 1 !important; pointer-events: auto !important; padding: 60px 20px; border-top: 1px solid var(--border-color); }
         }
 
-        /* === THANH ĐIỀU HƯỚNG BÁM ĐỈNH === */
+        /* === NAVBAR BÁM ĐỈNH === */
         .navbar {
             position: sticky; top: 0; z-index: 1500;
             background: var(--bg-body); border-bottom: 1px solid var(--border-color);
@@ -159,27 +143,21 @@
         }
         .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px;}
         .nav-links { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
-        .nav-links a {
-            text-decoration: none; color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase;
-            letter-spacing: 1.5px; padding-bottom: 5px; border-bottom: 2px solid transparent; transition: all 0.3s ease;
-        }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; padding-bottom: 5px; border-bottom: 2px solid transparent; transition: all 0.3s ease; }
         .nav-links a:hover { color: var(--text-main); border-bottom: 2px solid var(--accent); }
         .controls { display: flex; gap: 15px; }
-        button {
-            background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color);
-            border-radius: 20px; padding: 8px 15px; font-family: 'Montserrat', sans-serif; 
-            font-size: 10px; font-weight: 600; letter-spacing: 2px; cursor: pointer; 
-            transition: all 0.3s ease; box-shadow: 0 4px 10px var(--shadow);
-        }
+        button { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 15px; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 2px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px var(--shadow); }
         button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
         .scroll-offset { scroll-margin-top: 100px; }
 
         .container { max-width: 1300px; margin: 0 auto; padding: 60px 20px; }
 
-        /* === NỘI DUNG KPI === */
+        /* === THÔNG TIN HEADER === */
         .info-header { text-align: center; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 70px; border-bottom: 1px solid var(--border-color); padding-bottom: 30px; }
+
+        /* === KPI ĐẢO NỔI === */
         .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 25px; margin-bottom: 90px; }
-        .kpi-item { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px 15px; text-align: center; box-shadow: 0 8px 25px var(--shadow); transition: all 0.3s ease; cursor: default; }
+        .kpi-item { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px 15px; text-align: center; box-shadow: 0 8px 25px var(--shadow); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: default; }
         .kpi-item:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-color: var(--accent); }
         .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 15px; }
         .kpi-val { font-family: 'Montserrat', sans-serif; font-size: 38px; font-weight: 700; margin-bottom: 12px; }
@@ -196,12 +174,13 @@
         .media-wrapper video { width: 100%; max-width: 950px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 5px 20px var(--shadow); }
         .image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 70px; }
         .image-box { text-align: center; }
+        
         .zoomable { width: 100%; height: auto; cursor: zoom-in; border-radius: 8px; border: 1px solid var(--border-color); transition: transform 0.3s, box-shadow 0.3s; background: var(--bg-body);}
         .zoomable:hover { transform: scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
         .single-image .zoomable { max-width: 800px; }
         .caption { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 15px; text-align: center; }
 
-        /* === MODAL PHÓNG TO === */
+        /* === MODAL PHÓNG TO ẢNH === */
         .modal { display: none; position: fixed; z-index: 2000; padding-top: 60px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.9); backdrop-filter: blur(10px); }
         .modal-content { margin: auto; display: block; max-width: 95%; max-height: 85vh; object-fit: contain; border-radius: 8px; animation: zoom 0.3s ease; box-shadow: 0 0 50px rgba(255,255,255,0.1); }
         @keyframes zoom { from {transform:scale(0.8); opacity:0;} to {transform:scale(1); opacity:1;} }
@@ -219,27 +198,22 @@
 <body>
 
 <!-- ========================================== -->
-<!-- HERO SCROLL TRACK (Đường ray lăn chuột Dior) -->
+<!-- HERO SCROLL TRACK (Tự rút sang khi cuộn) -->
 <!-- ========================================== -->
 <div class="hero-scroll-track" id="home">
     <div class="hero-sticky-container">
         
-        <!-- CỘT TRÁI: VIDEO NỀN (Tự động co lại khi lăn chuột) -->
         <div class="hero-video-box" id="heroVideoBox">
             <video id="heroVideo" autoplay loop muted playsinline src="3.mp4"></video>
             <div class="hero-overlay"></div>
             
-            <!-- Chữ ở giữa sẽ mờ dần khi lăn chuột -->
             <div class="hero-center-text" id="heroCenterText">
                 <h1 class="lang" data-vi="Báo Cáo Giữa Kỳ" data-en="Midterm Report">Báo Cáo Giữa Kỳ</h1>
                 <p class="lang" data-vi="Mô Phỏng Phân Tích Cổ Phiếu" data-en="Stock Data Simulation">Mô Phỏng Phân Tích Cổ Phiếu</p>
             </div>
         </div>
 
-        <!-- CỘT PHẢI: BẢNG THÔNG TIN (Hiện dần ra khi lăn chuột) -->
         <div class="hero-right-box" id="heroRightBox">
-            
-            <!-- Trống đồng In chìm -->
             <svg class="trong-dong-watermark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="0.5" fill="none" />
                 <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="1.5" fill="none" stroke-dasharray="2,2" />
@@ -252,7 +226,6 @@
             <h2 class="dior-title lang" data-vi="Iconic creations" data-en="Iconic creations">Iconic creations</h2>
             <p class="dior-subtitle lang" data-vi="Trường Đại học Sư phạm - Đại học Đà Nẵng" data-en="University of Science and Education - UD">Trường Đại học Sư phạm - Đại học Đà Nẵng</p>
             
-            <!-- Đặt logo trường của bà vào đây -->
             <img src="logo_truong.png" class="uni-logo" alt="Logo Trường">
 
             <div class="author-info">
@@ -264,7 +237,7 @@
     </div>
 </div>
 
-<!-- NAVBAR BÁM ĐỈNH -->
+<!-- NAVBAR -->
 <div class="navbar">
     <div class="nav-brand">25CKDL</div>
     <div class="nav-links">
@@ -333,10 +306,9 @@
         <div class="caption lang" data-vi="Biến động giá giao dịch trong 365 phiên" data-en="Price fluctuation over 365 trading sessions">Biến động giá giao dịch trong 365 phiên</div>
     </div>
 
-    <!-- THỐNG KÊ (ẢNH 4 CHIỀU: NGÔN NGỮ x GIAO DIỆN) -->
+    <!-- THỐNG KÊ (ẢNH 4 CHIỀU) -->
     <h2 class="lang scroll-offset" id="stat-section" data-vi="II. Phân Tích Thống Kê" data-en="II. Statistical Analysis">II. Phân Tích Thống Kê</h2>
     <div class="image-grid">
-        <!-- ẢNH 1: BIỂU ĐỒ CỘT -->
         <div class="image-box">
             <img class="zoomable dynamic-img" 
                  src="2_bar_thang_light_vi.png" 
@@ -346,7 +318,6 @@
             <div class="caption lang" data-vi="Biểu đồ Mặt bằng giá trung bình theo tháng (Nhấp để phóng to)" data-en="Monthly Average Price Chart (Click to enlarge)">Biểu đồ Mặt bằng giá trung bình theo tháng (Nhấp để phóng to)</div>
         </div>
         
-        <!-- ẢNH 2: BOXPLOT -->
         <div class="image-box">
             <img class="zoomable dynamic-img" 
                  src="3_boxplot_light_vi.png" 
@@ -360,7 +331,6 @@
     <!-- TỔ CHỨC ĐỒ -->
     <h2 class="lang scroll-offset" id="hist-section" data-vi="III. Tổ Chức Đồ" data-en="III. Histogram">III. Tổ Chức Đồ</h2>
     <div class="media-wrapper single-image">
-        <!-- ẢNH 3: HISTOGRAM -->
         <img class="zoomable dynamic-img" 
              src="5_histogram_light_vi.png" 
              data-vi-light="5_histogram_light_vi.png" data-vi-dark="5_histogram_dark_vi.png" 
@@ -390,39 +360,27 @@
     let isEnglish = false;
     let chartInstance = null; 
 
-    // === 1. THUẬT TOÁN SCROLL CHIA ĐÔI MÀN HÌNH ===
+    // === 1. THUẬT TOÁN "SNAP CHIA ĐÔI MÀN HÌNH" (LƯỚT NHẸ TỰ RÚT SANG) ===
     window.addEventListener('scroll', () => {
-        // Vô hiệu hóa animation nếu màn hình nhỏ (điện thoại)
         if (window.innerWidth <= 900) return;
 
-        const track = document.querySelector('.hero-scroll-track');
+        const scrollPx = window.scrollY;
         const videoBox = document.getElementById('heroVideoBox');
         const centerText = document.getElementById('heroCenterText');
         const rightBox = document.getElementById('heroRightBox');
         
-        // Tính toán tọa độ cuộn
-        const trackRect = track.getBoundingClientRect();
-        const scrollPx = -trackRect.top; 
-        const maxScroll = trackRect.height - window.innerHeight; 
-        
-        let progress = scrollPx / maxScroll;
-        if (progress < 0) progress = 0;
-        if (progress > 1) progress = 1;
-        
-        // Giảm chiều rộng video từ 100% xuống 50%
-        const currentWidth = 100 - (50 * progress);
-        videoBox.style.width = currentWidth + '%';
-        
-        // Chữ giữa video mờ dần nhanh chóng (hoàn tất lúc 50% tiến trình)
-        const textOpacity = 1 - (progress * 2);
-        centerText.style.opacity = textOpacity < 0 ? 0 : textOpacity;
-        
-        // Bảng thông tin phải hiện ra chậm rãi ở nửa sau tiến trình
-        const rightOpacity = (progress - 0.3) * (1 / 0.7);
-        rightBox.style.opacity = rightOpacity < 0 ? 0 : rightOpacity;
-        
-        if (progress > 0.5) rightBox.style.pointerEvents = 'auto';
-        else rightBox.style.pointerEvents = 'none';
+        // Ngưỡng lướt nhẹ 50px là sẽ giật thu màn hình lại, chữ thu nhỏ lại 65% (0.65)
+        if (scrollPx > 50) {
+            videoBox.style.width = '50%';
+            centerText.style.transform = 'translate(-50%, -50%) scale(0.65)';
+            rightBox.style.opacity = '1';
+            rightBox.style.pointerEvents = 'auto';
+        } else {
+            videoBox.style.width = '100%';
+            centerText.style.transform = 'translate(-50%, -50%) scale(1)';
+            rightBox.style.opacity = '0';
+            rightBox.style.pointerEvents = 'none';
+        }
     });
 
     // === 2. HÀM XỬ LÝ TRÁO ẢNH 4 CHIỀU ===
