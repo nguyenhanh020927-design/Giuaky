@@ -113,7 +113,7 @@
             background-image: url('trongdong.png');
             background-repeat: no-repeat;
             background-position: center center; /* CĂN CHÍNH GIỮA HOÀN HẢO */
-            background-size: 80% auto; /* Độ lớn trống đồng */
+            background-size: 100% auto; /* Độ lớn trống đồng */
             /* Dùng overlay trắng/đen mờ để che bớt trống đồng đi, tạo hiệu ứng in chìm watermark */
         }
         
@@ -122,7 +122,7 @@
             content: "";
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-body); /* Lấy màu nền hiện tại Trắng hoặc Đen */
-            opacity: 0.96; /* Mờ 96% để trống đồng hiện lờ mờ 4% đằng sau */
+            opacity: 0.80; /* Mờ 96% để trống đồng hiện lờ mờ 4% đằng sau */
             z-index: 0;
             transition: background 0.4s ease;
         }
