@@ -25,9 +25,7 @@
 
     <style>
         /* === SỬA LỖI LỆCH TRỐNG ĐỒNG (Ép mọi phần tử tính toán viền chuẩn xác) === */
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         /* === TRƯỢT MƯỢT === */
         html { scroll-behavior: smooth; }
@@ -71,24 +69,16 @@
            HIỆU ỨNG DIOR: LƯỚT NHẸ TỰ RÚT SANG
            ========================================================= */
         
-        .hero-scroll-track {
-            height: 120vh; 
-            width: 100%;
-            position: relative;
-        }
+        .hero-scroll-track { height: 120vh; width: 100%; position: relative; }
 
         .hero-sticky-container {
-            position: sticky; top: 0;
-            height: 100vh; width: 100%;
-            display: flex; overflow: hidden;
-            background: var(--bg-body);
+            position: sticky; top: 0; height: 100vh; width: 100%;
+            display: flex; overflow: hidden; background: var(--bg-body);
         }
 
         .hero-video-box {
-            width: 100%; height: 100%;
-            position: relative; z-index: 2; 
-            will-change: width; 
-            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+            width: 100%; height: 100%; position: relative; z-index: 2; 
+            will-change: width; box-shadow: 10px 0 30px rgba(0,0,0,0.1);
             transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .hero-video-box video { width: 100%; height: 100%; object-fit: cover; }
@@ -106,42 +96,27 @@
         /* KHUNG THÔNG TIN PHẢI + ẢNH TRỐNG ĐỒNG CĂN GIỮA */
         .hero-right-box {
             width: 50%; height: 100%;
-            position: absolute; right: 0; top: 0;
-            opacity: 0; z-index: 1;
+            position: absolute; right: 0; top: 0; opacity: 0; z-index: 1;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: var(--bg-body); 
-            padding: 40px; text-align: center;
-            pointer-events: none; 
+            background: var(--bg-body); padding: 40px; text-align: center; pointer-events: none; 
             transition: opacity 0.8s ease; 
             
             /* TÍCH HỢP ẢNH TRỐNG ĐỒNG */
             background-image: url('trongdong.png');
             background-repeat: no-repeat;
-            background-position: center center; /* CĂN CHÍNH GIỮA HOÀN HẢO */
-            background-size: 85% auto; /* Độ lớn trống đồng */
+            background-position: center center; 
+            background-size: 85% auto; 
         }
         
-        /* Lớp che mờ cho Trống Đồng để không bị chói nét làm lấp chữ */
         .hero-right-box::before {
-            content: "";
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-body); 
-            opacity: 0.80; /* Điều chỉnh độ mờ trống đồng cho sang trọng */
-            z-index: 0;
-            transition: background 0.4s ease;
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-body); opacity: 0.94; z-index: 0; transition: background 0.4s ease;
         }
 
         .dior-title { font-family: 'Cormorant Garamond', serif; font-size: 46px; font-weight: 500; margin: 0 0 10px 0; letter-spacing: 2px; position: relative; z-index: 1; color: var(--accent); }
         .dior-subtitle { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted); margin: 0 0 50px 0; position: relative; z-index: 1; }
         
-        /* === TĂNG KÍCH THƯỚC LOGO TRƯỜNG === */
-        .uni-logo { 
-            width: 250px; /* ĐÃ TĂNG SIZE TỪ 160px LÊN 250px */
-            height: auto; margin-bottom: 50px; position: relative; z-index: 1; 
-            filter: drop-shadow(0 10px 20px var(--shadow)); transition: 0.3s ease; 
-        }
-        
-        /* Xử lý Logo trường: Lọc viền trắng khi ở Light Mode (nếu lười xóa phông) */
+        .uni-logo { width: 250px; height: auto; margin-bottom: 50px; position: relative; z-index: 1; filter: drop-shadow(0 10px 20px var(--shadow)); transition: 0.3s ease; }
         body:not(.dark-mode) .uni-logo { mix-blend-mode: multiply; }
 
         .author-info { position: relative; z-index: 1; font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.8; text-align: center; }
@@ -216,36 +191,42 @@
             .hero-sticky-container { position: relative; height: auto; flex-direction: column; }
             .hero-video-box { width: 100% !important; height: 50vh; }
             .hero-center-text { opacity: 1 !important; transform: translate(-50%, -50%) scale(0.7) !important; }
-            .hero-right-box { 
-                width: 100% !important; height: auto; position: relative; 
-                opacity: 1 !important; pointer-events: auto !important; 
-                padding: 50px 20px; border-top: 1px solid var(--border-color); 
-            }
+            .hero-right-box { width: 100% !important; height: auto; position: relative; opacity: 1 !important; pointer-events: auto !important; padding: 50px 20px; border-top: 1px solid var(--border-color); }
 
-            .navbar { padding: 15px 20px; flex-direction: column; gap: 15px; }
-            .nav-brand { margin-bottom: 5px; }
-            .nav-links { gap: 15px; }
-            .nav-links a { font-size: 10px; }
+            /* === ĐÃ FIX NAVBAR MOBILE NHỎ GỌN, SANG TRỌNG === */
+            .navbar { 
+                padding: 12px 20px; 
+                flex-wrap: wrap; /* Cho phép xếp thành 2 tầng */
+            }
+            .nav-brand { font-size: 18px; }
+            .controls button { padding: 6px 12px; font-size: 9px; }
+            
+            /* Biến các đường link thành thanh lướt ngang siêu gọn */
+            .nav-links { 
+                width: 100%; 
+                justify-content: flex-start; 
+                flex-wrap: nowrap; /* Không cho rớt dòng */
+                overflow-x: auto; /* Vuốt lướt ngang */
+                gap: 20px; 
+                padding-top: 12px; 
+                margin-top: 5px; 
+                border-top: 1px solid var(--border-color); 
+                -webkit-overflow-scrolling: touch;
+            }
+            /* Ẩn thanh cuộn xấu xí */
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links a { font-size: 10px; white-space: nowrap; }
 
             .container { padding: 40px 15px; }
 
-            .kpi-grid { 
-                display: flex; 
-                overflow-x: auto; 
-                scroll-snap-type: x mandatory; 
-                gap: 15px; 
-                padding-bottom: 20px; 
-                margin-bottom: 60px;
-                -webkit-overflow-scrolling: touch;
-            }
+            /* Bảng KPI trượt ngang */
+            .kpi-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; padding-bottom: 20px; margin-bottom: 60px; -webkit-overflow-scrolling: touch; }
             .kpi-grid::-webkit-scrollbar { height: 4px; }
             .kpi-grid::-webkit-scrollbar-track { background: transparent; }
             .kpi-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-            
             .kpi-item { flex: 0 0 75%; scroll-snap-align: center; }
             
             h2 { font-size: 24px; }
-
             .interactive-chart-wrapper { padding: 20px 10px; }
             .image-grid { grid-template-columns: 1fr; gap: 40px; }
             .dior-title { font-size: 32px; }
@@ -256,7 +237,6 @@
 
 <body>
 
-<!-- HERO SCROLL TRACK -->
 <div class="hero-scroll-track" id="home">
     <div class="hero-sticky-container">
         
@@ -275,7 +255,6 @@
             <h2 class="dior-title lang" data-vi="Iconic creations" data-en="Iconic creations">Iconic creations</h2>
             <p class="dior-subtitle lang" data-vi="Trường Đại học Sư phạm - Đại học Đà Nẵng" data-en="University of Science and Education - UD">Trường Đại học Sư phạm - Đại học Đà Nẵng</p>
             
-            <!-- Logo trường đã được phóng to -->
             <img src="logo_truong.png" class="uni-logo" alt="Logo Trường">
 
             <div class="author-info">
@@ -356,10 +335,9 @@
         <div class="caption lang" data-vi="Biến động giá giao dịch trong 365 phiên" data-en="Price fluctuation over 365 trading sessions">Biến động giá giao dịch trong 365 phiên</div>
     </div>
 
-    <!-- THỐNG KÊ (ẢNH 4 CHIỀU: NGÔN NGỮ x GIAO DIỆN CHUẨN 3 ẢNH GỐC) -->
+    <!-- THỐNG KÊ (ẢNH 4 CHIỀU: NGÔN NGỮ x GIAO DIỆN) -->
     <h2 class="lang scroll-offset" id="stat-section" data-vi="II. Phân Tích Thống Kê" data-en="II. Statistical Analysis">II. Phân Tích Thống Kê</h2>
     <div class="image-grid">
-        <!-- ẢNH 1: BIỂU ĐỒ CỘT -->
         <div class="image-box">
             <img class="zoomable dynamic-img" 
                  src="2_bar_thang_light_vi.png" 
@@ -369,7 +347,6 @@
             <div class="caption lang" data-vi="Biểu đồ Mặt bằng giá trung bình theo tháng (Nhấp để phóng to)" data-en="Monthly Average Price Chart (Click to enlarge)">Biểu đồ Mặt bằng giá trung bình theo tháng (Nhấp để phóng to)</div>
         </div>
         
-        <!-- ẢNH 2: BOXPLOT -->
         <div class="image-box">
             <img class="zoomable dynamic-img" 
                  src="3_boxplot_light_vi.png" 
@@ -383,7 +360,6 @@
     <!-- TỔ CHỨC ĐỒ -->
     <h2 class="lang scroll-offset" id="hist-section" data-vi="III. Tổ Chức Đồ" data-en="III. Histogram">III. Tổ Chức Đồ</h2>
     <div class="media-wrapper single-image">
-        <!-- ẢNH 3: HISTOGRAM -->
         <img class="zoomable dynamic-img" 
              src="5_histogram_light_vi.png" 
              data-vi-light="5_histogram_light_vi.png" data-vi-dark="5_histogram_dark_vi.png" 
@@ -422,7 +398,6 @@
         const centerText = document.getElementById('heroCenterText');
         const rightBox = document.getElementById('heroRightBox');
         
-        // Ngưỡng lướt nhẹ 50px là sẽ giật thu màn hình lại, chữ thu nhỏ lại 65%
         if (scrollPx > 50) {
             videoBox.style.width = '50%';
             centerText.style.transform = 'translate(-50%, -50%) scale(0.65)';
