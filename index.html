@@ -317,12 +317,12 @@
         <div class="kpi-item">
             <div class="kpi-label lang" data-vi="Đỉnh Giá Chu Kỳ" data-en="Cycle Price Peak">Đỉnh Giá Chu Kỳ</div>
             <div class="kpi-val up">132.8</div>
-            <div class="kpi-sub-row"><span class="kpi-sub-text lang" data-vi="Đạt tại" data-en="Reached at">Đạt tại</span><span class="kpi-sub-highlight lang" data-vi="Phiên 165" data-en="Session 165">Phiên 165</span></div>
+            <div class="kpi-sub-row"><span class="kpi-sub-text lang" data-vi="Đạt tại" data-en="Reached at">Đạt tại</span><span class="kpi-sub-highlight lang" data-vi="Ngày 165" data-en="Session 165">Phiên 165</span></div>
         </div>
         <div class="kpi-item">
             <div class="kpi-label lang" data-vi="Đáy Giá Chu Kỳ" data-en="Cycle Price Bottom">Đáy Giá Chu Kỳ</div>
             <div class="kpi-val down">89.4</div>
-            <div class="kpi-sub-row"><span class="kpi-sub-text lang" data-vi="Đạt tại" data-en="Reached at">Đạt tại</span><span class="kpi-sub-highlight lang" data-vi="Phiên 365" data-en="Session 365">Phiên 365</span></div>
+            <div class="kpi-sub-row"><span class="kpi-sub-text lang" data-vi="Đạt tại" data-en="Reached at">Đạt tại</span><span class="kpi-sub-highlight lang" data-vi="Ngày 365" data-en="Session 365">Phiên 365</span></div>
         </div>
         <div class="kpi-item">
             <div class="kpi-label lang" data-vi="Trung Bình Đóng Cửa" data-en="Average Close Price">Trung Bình Đóng Cửa</div>
@@ -354,7 +354,7 @@
     <h2 class="lang scroll-offset" id="sim-section" data-vi="I. Mô Phỏng Động Học" data-en="I. Dynamic Simulation">I. Mô Phỏng Động Học</h2>
     <div class="media-wrapper">
         <video controls><source src="ABCFINALmp4.mp4" type="video/mp4"></video>
-        <div class="caption lang" data-vi="Biến động giá giao dịch trong 365 phiên" data-en="Price fluctuation over 365 trading sessions">Biến động giá giao dịch trong 365 phiên</div>
+        <div class="caption lang" data-vi="Biến động giá giao dịch trong 365 ngày" data-en="Price fluctuation over 365 trading sessions">Biến động giá giao dịch trong 365 phiên</div>
     </div>
 
     <!-- THỐNG KÊ (ẢNH 4 CHIỀU: NGÔN NGỮ x GIAO DIỆN) -->
@@ -517,10 +517,10 @@
         if (chartInstance) {
             chartInstance.data.datasets[0].label = isEnglish ? 'Close Price' : 'Giá Đóng Cửa';
             chartInstance.data.datasets[1].label = isEnglish ? 'Open Price' : 'Giá Mở Cửa';
-            chartInstance.options.scales.x.title.text = isEnglish ? 'Time (Trading Session)' : 'Thời Gian (Phiên Giao Dịch)';
+            chartInstance.options.scales.x.title.text = isEnglish ? 'Time (Trading Session)' : 'Thời Gian ';
             chartInstance.options.scales.y.title.text = isEnglish ? 'Price Level (VND)' : 'Mức Giá (VNĐ)';
             chartInstance.data.labels = chartInstance.data.labels.map((label, index) => {
-                return isEnglish ? `Session ${index + 1}` : `Phiên ${index + 1}`;
+                return isEnglish ? `Session ${index + 1}` : `Ngày ${index + 1}`;
             });
             chartInstance.update();
         }
@@ -555,7 +555,7 @@
                 if (columns.length >= 7) {
                     openPrices.push(parseFloat(columns[0])); 
                     closePrices.push(parseFloat(columns[6])); 
-                    labels.push(isEnglish ? `Session ${index + 1}` : `Phiên ${index + 1}`);
+                    labels.push(isEnglish ? `Session ${index + 1}` : `Ngày ${index + 1}`);
                 }
             });
 
@@ -588,7 +588,7 @@
                         } 
                     },
                     scales: {
-                        x: { title: { display: true, text: isEnglish ? 'Time (Trading Session)' : 'Thời Gian (Phiên Giao Dịch)', font: { size: 13, weight: 'bold' } }, grid: { display: false }, ticks: { maxTicksLimit: 15 } },
+                        x: { title: { display: true, text: isEnglish ? 'Time (Trading Session)' : 'Thời Gian ', font: { size: 13, weight: 'bold' } }, grid: { display: false }, ticks: { maxTicksLimit: 15 } },
                         y: { title: { display: true, text: isEnglish ? 'Price Level (VND)' : 'Mức Giá (VNĐ)', font: { size: 13, weight: 'bold' } }, grid: { color: 'rgba(136,136,136,0.3)', borderDash: [3, 3] } }
                     }
                 }
